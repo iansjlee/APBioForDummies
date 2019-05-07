@@ -2,24 +2,21 @@
 
 <head>
     <style>
-        #header {
-            height: 25%;
-            width: 100%;
-            border: 2px solid black;
-        }
+        
 
         #headertext {
             height: 30%;
             width: 100%;
-            position: absolute;
-            left: 0;
-            top: 10%;
+         
             text-align: center;
             font-size: 200%;
+
+            background-image: url("mitose.png");
+            background-size: 100% 100%;
+            border: 2px solid black;
         }
 
         #text {
-            position: absolute;
             width: 60%;
             left: 20%;
             top: 30%;
@@ -27,7 +24,6 @@
 
         /* Dropdown Button */
         .dropbtn {
-            position: absolute;
             top: 10px;
             left: 10px;
             background-color: Black;
@@ -41,6 +37,7 @@
         .dropdown {
             position: relative;
             display: inline-block;
+            float: left;
         }
 
         /* Dropdown Content (Hidden by Default) */
@@ -51,6 +48,8 @@
             min-width: 160px;
             box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
             z-index: 1;
+            font-size: 50%;            
+
         }
 
         /* Links inside the dropdown */
@@ -59,6 +58,7 @@
             padding: 12px 16px;
             text-decoration: none;
             display: block;
+
         }
 
         /* Change color of dropdown links on hover */
@@ -123,30 +123,35 @@
             position: absolute;
             top: 0;
             right: 0;
+        #drawingpane {
+            width: 1600px;
+            height: 400px;
         }
     </style>
 
 </head>
 
 <body>
-    <div class="dropdown">
-        <button class="dropbtn">Menu</button>
-        <div class="dropdown-content">
-            <a href="Starting.htm">Home Page</a>
-            <a href="MoleculesOfLife.htm">Molecules of Life</a>
-            <a href="Photosynthesis.htm">Metabolism and Photosynthesis</a>
-            <a href="Respiration.htm">Aerobic Respiration, Molecular Gen</a>
-            <a href="GeneRegMitosisMeiosis.htm">Gene Regulation, Mitosis, Meiosis</a>
-            <a href="MendelianGeneticsBiotech.htm">Mendelian Genetics, Biotech</a>
-            <a href="Evolution.htm">Evolution</a>
-            <a href="Nervous+EndocrineSystems.htm">Nervous and Endocrine System</a>
-            <a href="ImmuneSystemDevelopment.htm">Immune System and Development</a>
-            <a href="Ecology.htm">Ecology</a>
-        </div>
-    </div>
+    
 
-    <img src="mitose.png" id="header" />
-    <div id="headertext"> Gene Control, Mitosis, Meiosis</div>
+    
+    <div id="headertext"> Gene Control, Mitosis, Meiosis
+            <div class="dropdown">
+                    <button class="dropbtn">Menu</button>
+                    <div class="dropdown-content">
+                        <a href="Starting.htm">Home Page</a>
+                        <a href="MoleculesOfLife.htm">Molecules of Life</a>
+                        <a href="Photosynthesis.htm">Metabolism and Photosynthesis</a>
+                        <a href="Respiration.htm">Aerobic Respiration, Molecular Gen</a>
+                        <a href="GeneRegMitosisMeiosis.htm">Gene Regulation, Mitosis, Meiosis</a>
+                        <a href="MendelianGeneticsBiotech.htm">Mendelian Genetics, Biotech</a>
+                        <a href="Evolution.htm">Evolution</a>
+                        <a href="Nervous+EndocrineSystems.htm">Nervous and Endocrine System</a>
+                        <a href="ImmuneSystemDevelopment.htm">Immune System and Development</a>
+                        <a href="Ecology.htm">Ecology</a>
+                    </div>
+                </div>
+    </div>
     <div id="text">
         <div id='chapter10' class='chapter'> Chapter 10: Gene Control </div>
 
@@ -225,6 +230,105 @@
             console.log("worked")
         }
 
+   
+
+    <div id="headertext"> 
+            <div class="dropdown">
+                    <button class="dropbtn">Menu</button>
+                    <div class="dropdown-content">
+                        <a href="Starting.htm">Home Page</a>
+                        <a href="MoleculesOfLife.htm">Molecules of Life</a>
+                        <a href="Photosynthesis.htm">Metabolism and Photosynthesis</a>
+                        <a href="Respiration.htm">Aerobic Respiration, Molecular Gen</a>
+                        <a href="GeneRegMitosisMeiosis.htm">Gene Regulation, Mitosis, Meiosis</a>
+                        <a href="MendelianGeneticsBiotech.htm">Mendelian Genetics, Biotech</a>
+                        <a href="Evolution.htm">Evolution</a>
+                        <a href="Nervous+EndocrineSystems.htm">Nervous and Endocrine System</a>
+                        <a href="ImmuneSystemDevelopment.htm">Immune System and Development</a>
+                        <a href="Ecology.htm">Ecology</a>
+                    </div>
+                </div>
+        
+        Gene Regulation, Mitosis, Meiosis (Chapters 10-12)
+
+    </div>
+    <div id="text"> P. OVIDI NASONIS METAMORPHOSEON LIBER PRIMVS
+    </div>
+
+    <button id='startanimation' onclick='lick()'>Start Animation</button>
+
+    <canvas id='drawingpane'></canvas>
+    <div id='DStrand'></div>
+
+    <script>
+        /*
+        function drawcurve() {
+            var counter = 0;
+            var increase = Math.PI / 100;
+
+            for (i = 0; i <= 1; i += 0.01) {
+                x = i;
+                y = Math.sin(counter);
+                counter += increase;
+            }
+        }
+        */
+        let rects = [];
+        let drawing = null;
+        let SineCurve = {
+            x: 20,
+            y: 100,
+            graphic: null,
+            move: function () {
+                var counter = 0;
+                var increase = 2 * Math.PI / 100;
+                for (i = 0; i <= 1; i += 0.01) {
+                    x = i;
+                    y = Math.sin(counter);
+                    counter += increase;
+                }
+            }
+        }
+        let shape = SineCurve;
+
+        /* function initialize() {
+             SineCurve.graphic = document.getElementById('DStrand')
+         }
+         initialize();
+         */
+        function lick() {
+            console.log("sugma ballz")
+            drawing = Object.assign({}, shape);
+            rects.push(drawing)
+        }
+
+        function drawPane() {
+          //  ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.rect(0, 0, canvas.width, canvas.height);
+            //ctx.stroke();
+
+
+            for (let i = 0; i < rects.length; i++) {
+                rects[i].render(ctx)
+            }
+
+
+            if (drawing != null) {
+                drawing.render(ctx);
+            }
+        }
+
+        function resetCanvas() {
+            canvas = document.getElementById('drawingpane');
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
+
+            ctx = canvas.getContext('2d');
+            drawPane();
+
+        }
+        window.onload = resetCanvas;
+        window.onresize = resetCanvas;
     </script>
 </body>
 

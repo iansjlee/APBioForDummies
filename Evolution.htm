@@ -2,25 +2,22 @@
 
 <head>
     <style>
-        #header {
-            height: 25%;
-            width: 100%;
-            border: 2px solid black;
-        }
-
+       
         #headertext {
             color: white;
             height: 30%;
             width: 100%;
-            position: absolute;
             left: 0;
             top: 10%;
             text-align: center;
             font-size: 200%;
+            background-image: url("evolution.jpeg");
+            background-size: 100% 100%;
+            border: 2px solid black;
+
         }
 
         #text {
-            position: absolute;
             width: 60%;
             left: 20%;
             top: 30%;
@@ -28,7 +25,6 @@
 
         /* Dropdown Button */
         .dropbtn {
-            position: absolute;
             top: 10px;
             left: 10px;
             background-color: Black;
@@ -42,6 +38,7 @@
         .dropdown {
             position: relative;
             display: inline-block;
+            float: left;
         }
 
         /* Dropdown Content (Hidden by Default) */
@@ -52,6 +49,8 @@
             min-width: 160px;
             box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
             z-index: 1;
+            font-size: 50%;            
+
         }
 
         /* Links inside the dropdown */
@@ -81,24 +80,24 @@
 </head>
 
 <body>
-    <div class="dropdown">
-        <button class="dropbtn">Menu</button>
-        <div class="dropdown-content">
-                <a href="Starting.htm">Home Page</a>
-                <a href="MoleculesOfLife.htm">Molecules of Life</a>
-                <a href="Photosynthesis.htm">Metabolism and Photosynthesis</a>
-                <a href="Respiration.htm">Aerobic Respiration, Molecular Gen</a>
-                <a href="GeneRegMitosisMeiosis.htm">Gene Regulation, Mitosis, Meiosis</a>
-                <a href="MendelianGeneticsBiotech.htm">Mendelian Genetics, Biotech</a>
-                <a href="Evolution.htm">Evolution</a>
-                <a href="Nervous+EndocrineSystems.htm">Nervous and Endocrine System</a>
-                <a href="ImmuneSystemDevelopment.htm">Immune System and Development</a>
-                <a href="Ecology.htm">Ecology</a>
-        </div>
-    </div>
+    
 
-    <img src="evolution.jpeg" id="header" />
-    <div id="headertext"> Evolution </div>
+    <div id="headertext"> Evolution (Chapters 16-19)
+            <div class="dropdown">
+                    <button class="dropbtn">Menu</button>
+                    <div class="dropdown-content">
+                            <a href="Starting.htm">Home Page</a>
+                            <a href="MoleculesOfLife.htm">Molecules of Life</a>
+                            <a href="Photosynthesis.htm">Metabolism and Photosynthesis</a>
+                            <a href="Respiration.htm">Aerobic Respiration, Molecular Gen</a>
+                            <a href="GeneRegMitosisMeiosis.htm">Gene Regulation, Mitosis, Meiosis</a>
+                            <a href="MendelianGeneticsBiotech.htm">Mendelian Genetics, Biotech</a>
+                            <a href="Evolution.htm">Evolution</a>
+                            <a href="Nervous+EndocrineSystems.htm">Nervous and Endocrine System</a>
+                            <a href="ImmuneSystemDevelopment.htm">Immune System and Development</a>
+                            <a href="Ecology.htm">Ecology</a>
+                    </div>
+                </div> </div>
     <div id="text"> P. OVIDI NASONIS METAMORPHOSEON LIBER PRIMVS
 
         In nova fert animus mutatas dicere formas
