@@ -1,12 +1,149 @@
 <html>
-    <head>
-        <title> APBioForDummies </title>
-        <style> 
-        </style>
-    </head>
-    <body>
-        <script>
-            <div> APBioForDummies </div>
-        </script>
-    </body>
+
+<head>
+    <style type="text/css">
+        * {
+            padding: 0;
+            /*border: 0;*/
+            margin: 0;
+        }
+
+        /* Dropdown Button */
+        .dropbtn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+        }
+
+        #Title {
+            background: linear-gradient(to top, rgb(120, 243, 120), rgb(41, 94, 41));
+
+            font-size: 60px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.678);
+            text-align: center;
+            padding-top: 25px;
+            padding-bottom: 25px;
+        }
+
+        /* The container <div> - needed to position the dropdown content */
+        .dropdown {
+            position: left;
+            float: left;
+            display: inline-block;
+            margin: 0px;
+        }
+
+        /* Dropdown Content (Hidden by Default) */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            font-size: 30%;
+            max-width: 20%;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        /* Links inside the dropdown */
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {
+            background-color: rgb(44, 168, 19);
+        }
+
+        /* Show the dropdown menu on hover */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Change the background color of the dropdown button when the dropdown content is shown */
+        .dropdown:hover .dropbtn {
+            background-color: #3e8e41;
+        }
+
+        #Intro { /* image, currently taken out */
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            height: 200px;
+            width: 400px;
+        }
+
+        form#form {
+            width: 100%;
+            display: inline-block;
+            text-align: center;
+        }
+
+        div#signin {
+            font-size: 110%;
+            margin: 1%;
+            font-family: "Times New Roman", Times, serif;
+            text-align: center;
+            color: darkgreen;
+        }
+
+        input {
+            font-size: 110%;
+            margin: 1%;
+            font-family: "Times New Roman", Times, serif;
+            color: darkgreen;
+            
+        }
+
+        a {
+            display: block;
+            text-align: center;
+        }
+
+        #login {
+            font-size: 160%;
+            color: darkgreen;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id='Title'>
+        APBioForDummies
+        <div class="dropdown">
+            <button class="dropbtn">Unit Pages</button>
+            <div class="dropdown-content">
+                <a href="MoleculesOfLife.htm"> Ch. 1-4: Molecules of Life </a>
+                <a href="Photosynthesis.htm"> Ch. 5-6: Metabolism, Photosynthesis </a>
+                <a href="Respiration.htm"> Ch. 7-9: Aerobic Respiration, Molecular Gen </a>
+                <a href="GeneRegMitosisMeiosis.htm"> Ch. 10-12: Gene Regulation, Mitosis, Meiosis </a>
+                <a href="MendelianGeneticsBiotech.htm"> Ch. 13-15: Mend gen, Biotech </a>
+                <a href="Evolution.htm"> Ch. 16-19: Evolution </a>
+                <a href="Nervous+EndocrineSystems.htm"> Ch. 32-34: Nervous and Endocrine Systems </a>
+                <a href="ImmuneSystemDevelopment.htm"> Ch. 37, 41-42: Immune System and Development </a>
+                <a href="Ecology.htm"> Ch. 44-47: Ecology </a>
+
+            </div>
+        </div>
+        
+    </div>
+    <form id='form' action="/login" method="POST">
+        <div id='login' class='title'> Sign in here! </div>
+        <div class='signin'> Username: <input type="text" name="username"> <br>
+            Password: <input type="password" name="password"> <br>
+            <input type="submit" value="Submit"> <br>
+        </div>
+    </form>
+    <a href="/register"> No Account? Register Here </a>
+    <script>
+
+    </script>
+</body>
+
 </html>

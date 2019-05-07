@@ -1,15 +1,14 @@
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
 const app = express();
 const urlencodedParser = bodyParser.urlencoded({
     extended: false
-})
-//var http = require('http').createServer(app);
+});
 
-app.set('view engine', 'pug');
+
 app.set('views', './views');
+app.use('/static', express.static(__dirname + '/static'));
 
 const databaseFile = './database.db';
 const db = new sqlite3.Database(databaseFile);
@@ -20,7 +19,6 @@ function initDB(db) {
     db.serialize(function () {
         //Big O: 1
         //create tutor table and student table in database
-        db.run('CREATE TABLE IF NOT EXISTS tutor(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name VARCHAR(256), username VARCHAR(256), password VARCHAR(256), subject , location )');
         db.run('CREATE TABLE IF NOT EXISTS student(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name VARCHAR(256), username VARCHAR(256), password VARCHAR(256), subject VARCHAR(256), locationReq )');
     });
 }
@@ -28,7 +26,7 @@ function initDB(db) {
 app.get('/register', function (req, res) {
     //Big O: 1
     //takes user to register page
-    res.sendFile(__dirname + '/' + "register.htm");
+    res.sendFile(__dirname + '/' + "Register.htm");
 });
 
 app.get('/', function (req, res) {
@@ -126,38 +124,9 @@ function findusernamestudent(db, username) {
     return prom2;
 }
 
-app.post('/tutor', urlencodedParser, function (req, res) {
+app.post('/login', urlencodedParser, function (req, res) {
     //Big O: n
-    //opens the tutor page when the tutor submits their username and password
-    let username = req.body.username;
-    let password = req.body.password;
-    let prom = validatetutor(username, password);
-    let students = [];
-    prom.then(function (resolve) {
-        //Big O: 1
-        //calls promise to put student data into a linked list
-        let stuprom = studentlist();
-        stuprom.then(function (data) {
-            //Big O: n
-            //renders the tutor pgae with the size of the linked list, the data of the students, and the tutor's username
-            students = data.toArray();
-            res.render("tutor", { number: data.size(), students: students, username: username });
-        }).catch(function (err) {
-            //Big O: 1
-            res.send(err);
-        })
-    })
-        .catch(function (err) {
-            //Big O: 1
-            //renders if username or password is incorrect
-            res.send("username or password is incorrect");
-        })
-});
-
-
-app.post('/student', urlencodedParser, function (req, res) {
-    //Big O: n
-    //opens the student page when the tutor submits their username and password
+    //opens the starting page when the user submits their username and password
     let username = req.body.username;
     let password = req.body.password;
     let prom = validate(username, password);
