@@ -76,10 +76,53 @@
             background-color: #3e8e41;
         }
 
-        #drawingpane{
-            width: 1000px;
-            height: 500px;
+        .chapter {
+            border-bottom: 2px solid black;
+            font-size: 200%;
+            font-display: bold;
+        }
 
+        .term {
+            width: 48%;
+            display: inline-block;
+        }
+
+        .def {
+            width: 48%;
+            display: inline-block;
+            background-color: black;
+        }
+
+        .spacer {
+            height: 10px;
+            border-bottom: 1px solid black;
+        }
+
+        .bigspacer {
+            height: 40px;
+        }
+
+        #def5h {
+            background-color: white;
+            width: 24%;
+        }
+        #def5hh{
+            background-color: white;
+            width: 24%;
+        }
+        #container {
+            background-color: white;
+            width: 0%;
+            height: 0%;
+            position: fixed;
+            top: 2px;
+            left: 2px;
+        }
+
+        #X {
+            position: absolute;
+            top: 0;
+            right: 0;
         }
     </style>
 
@@ -89,27 +132,100 @@
     <div class="dropdown">
         <button class="dropbtn">Menu</button>
         <div class="dropdown-content">
-                <a href="Starting.htm">Home Page</a>
-                <a href="MoleculesOfLife.htm">Molecules of Life</a>
-                <a href="Photosynthesis.htm">Metabolism and Photosynthesis</a>
-                <a href="Respiration.htm">Aerobic Respiration, Molecular Gen</a>
-                <a href="GeneRegMitosisMeiosis.htm">Gene Regulation, Mitosis, Meiosis</a>
-                <a href="MendelianGeneticsBiotech.htm">Mendelian Genetics, Biotech</a>
-                <a href="Evolution.htm">Evolution</a>
-                <a href="Nervous+EndocrineSystems.htm">Nervous and Endocrine System</a>
-                <a href="ImmuneSystemDevelopment.htm">Immune System and Development</a>
-                <a href="Ecology.htm">Ecology</a>
+            <a href="Starting.htm">Home Page</a>
+            <a href="MoleculesOfLife.htm">Molecules of Life</a>
+            <a href="Photosynthesis.htm">Metabolism and Photosynthesis</a>
+            <a href="Respiration.htm">Aerobic Respiration, Molecular Gen</a>
+            <a href="GeneRegMitosisMeiosis.htm">Gene Regulation, Mitosis, Meiosis</a>
+            <a href="MendelianGeneticsBiotech.htm">Mendelian Genetics, Biotech</a>
+            <a href="Evolution.htm">Evolution</a>
+            <a href="Nervous+EndocrineSystems.htm">Nervous and Endocrine System</a>
+            <a href="ImmuneSystemDevelopment.htm">Immune System and Development</a>
+            <a href="Ecology.htm">Ecology</a>
         </div>
     </div>
 
     <img src="mitose.png" id="header" />
-    <div id="headertext"> Gene Regulation, Mitosis, Meiosis</div>
-    <div id="text"> P. OVIDI NASONIS METAMORPHOSEON LIBER PRIMVS
-       </div>
-       <canvas id='drawingpane'>
-        </canvas>
+    <div id="headertext"> Gene Control, Mitosis, Meiosis</div>
+    <div id="text">
+        <div id='chapter10' class='chapter'> Chapter 10: Gene Control </div>
 
-        <div id= ''></div>
+        <div class='bigspacer'></div>
+        <div class='bigspacer'> Click the black boxes to reveal the definitions. </div>
+        <div class='spacer'></div>
+
+        <div id='term1' class='term'> Biology </div>
+        <div id='def1' class='def' onclick='reveal(1)'> The scientific study of life. </div>
+
+        <div class='spacer'></div>
+
+        <div class='bigspacer'> </div>
+
+        <button onclick="hide()"> Click to cover definitions. </button>
+
+        <div class='bigspacer'> </div>
+
+        <div id='chapter11' class='chapter'> Chapter 11: How Cells Reproduce </div>
+
+        <div class='bigspacer'></div>
+        <div class='bigspacer'> Click the black boxes to reveal the definitions. </div>
+        <div class='spacer'></div>
+
+        <div id='term5' class='term'> Mitosis </div>
+        <div id='def5' class='def' onclick='reveal(5)'> Nuclear division mechanism that eukaryotes use to produce more
+            cells while maintaining the same number of chromosones. </div>
+        <div id='term5h' class='term'> </div>
+        <div id='def5h' class='def'> <button id='term5b' onclick='mitose()'> Animation </button> </div>
+        <div id='def5hh' class = 'def'> <button id='term5bb' onclick='close()'>Close Animation</button></div>
+
+
+        <div class='bigspacer'> </div>
+
+        <div id='chapter12' class='chapter'> Chapter 12: Meiosis and Sexual Reproduction </div>
+
+        <div class='bigspacer'> </div>
+    </div>
+
+    <div id='container' >
+    </div>
+
+    <script>
+        function reveal(num) {
+            let string = "def" + num;
+            document.getElementById(string).style.backgroundColor = "white";
+        }
+
+        function hide() {
+            document.getElementById("def1").style.backgroundColor = "black";
+            document.getElementById("def2").style.backgroundColor = "black";
+            document.getElementById("def3").style.backgroundColor = "black";
+            document.getElementById("def4").style.backgroundColor = "black";
+            document.getElementById("def5").style.backgroundColor = "black";
+            document.getElementById("def6").style.backgroundColor = "black";
+            document.getElementById("def7").style.backgroundColor = "black";
+            document.getElementById("def8").style.backgroundColor = "black";
+            document.getElementById("def9").style.backgroundColor = "black";
+            document.getElementById("def10").style.backgroundColor = "black";
+            document.getElementById("def11").style.backgroundColor = "black";
+            document.getElementById("def12").style.backgroundColor = "black";
+            document.getElementById("def13").style.backgroundColor = "black";
+            document.getElementById("def14").style.backgroundColor = "black";
+            document.getElementById("def15").style.backgroundColor = "black";
+        }
+
+
+
+        function mitose() {
+            document.getElementById('container').style.width = "50%";
+            document.getElementById('container').style.height = "50%";
+            document.getElementById('container').style.border = "2px solid black";
+        }
+
+        function close(){
+            console.log("worked")
+        }
+
+    </script>
 </body>
 
 </html>
