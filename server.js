@@ -6,6 +6,7 @@ const urlencodedParser = bodyParser.urlencoded({
     extended: false
 });
 
+
 app.set('views', './views');
 app.use('/static', express.static(__dirname + '/static'));
 

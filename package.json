@@ -1,0 +1,8 @@
+{
+  "name": "package.json",
+  "version": "0.0.1",
+  "description": "chat page",
+  "dependencies": {
+    "sqlite": "^3.0.3"
+  }
+}
