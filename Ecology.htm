@@ -12,15 +12,16 @@
             color: white;
             height: 30%;
             width: 100%;
-            position: absolute;
             left: 0;
             top: 10%;
             text-align: center;
             font-size: 200%;
+            background-image: url("mendgen.jpeg");
+            background-size: 100% 100%;
+          
         }
 
         #text {
-            position: absolute;
             width: 60%;
             left: 20%;
             top: 30%;
@@ -28,7 +29,6 @@
 
         /* Dropdown Button */
         .dropbtn {
-            position: absolute;
             top: 10px;
             left: 10px;
             background-color: Black;
@@ -42,6 +42,7 @@
         .dropdown {
             position: relative;
             display: inline-block;
+            float: left;
         }
 
         /* Dropdown Content (Hidden by Default) */
@@ -81,24 +82,27 @@
 </head>
 
 <body>
-    <div class="dropdown">
-        <button class="dropbtn">Menu</button>
-        <div class="dropdown-content">
-            <a href="Starting.htm">Home Page</a>
-            <a href="MoleculesOfLife.htm">Molecules of Life</a>
-            <a href="Photosynthesis.htm">Metabolism and Photosynthesis</a>
-            <a href="Respiration.htm">Aerobic Respiration, Molecular Gen</a>
-            <a href="GeneRegMitosisMeiosis.htm">Gene Regulation, Mitosis, Meiosis</a>
-            <a href="MendelianGeneticsBiotech.htm">Mendelian Genetics, Biotech</a>
-            <a href="Evolution.htm">Evolution</a>
-            <a href="Nervous+EndocrineSystems.htm">Nervous and Endocrine System</a>
-            <a href="ImmuneSystemDevelopment.htm">Immune System and Development</a>
-            <a href="Ecology.htm">Ecology</a>
-        </div>
-    </div>
+    
 
-    <img src="mendgen.jpeg" id="header" />
-    <div id="headertext"> Ecology (Chapters 44-47) </div>
+    
+    <div id="headertext"> 
+            <div class="dropdown">
+                    <button class="dropbtn">Menu</button>
+                    <div class="dropdown-content">
+                        <a href="Starting.htm">Home Page</a>
+                        <a href="MoleculesOfLife.htm">Molecules of Life</a>
+                        <a href="Photosynthesis.htm">Metabolism and Photosynthesis</a>
+                        <a href="Respiration.htm">Aerobic Respiration, Molecular Gen</a>
+                        <a href="GeneRegMitosisMeiosis.htm">Gene Regulation, Mitosis, Meiosis</a>
+                        <a href="MendelianGeneticsBiotech.htm">Mendelian Genetics, Biotech</a>
+                        <a href="Evolution.htm">Evolution</a>
+                        <a href="Nervous+EndocrineSystems.htm">Nervous and Endocrine System</a>
+                        <a href="ImmuneSystemDevelopment.htm">Immune System and Development</a>
+                        <a href="Ecology.htm">Ecology</a>
+                    </div>
+                </div>
+                Ecology (Chapters 44-47) 
+    </div>
     <div id="text"> P. OVIDI NASONIS METAMORPHOSEON LIBER PRIMVS
 
         In nova fert animus mutatas dicere formas
