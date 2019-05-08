@@ -1,232 +1,154 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+var app = require('express')();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+var path = require('path');
+var bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
-const app = express();
-const urlencodedParser = bodyParser.urlencoded({
-    extended: false
-});
+const databaseFile = './accounts.db';
+const db = new sqlite3.Database(databaseFile)
 
-
-app.set('views', './views');
-app.use('/static', express.static(__dirname + '/static'));
-
-const databaseFile = './database.db';
-const db = new sqlite3.Database(databaseFile);
-
-function initDB(db) {
-    //Big O: 1
-    //initialize the database
-    db.serialize(function () {
-        //Big O: 1
-        //create tutor table and student table in database
-        db.run('CREATE TABLE IF NOT EXISTS login(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username VARCHAR(256), password VARCHAR(256), )');
-    });
-}
-
-app.get('/register', function (req, res) {
-    //Big O: 1
-    //takes user to register page
-    res.sendFile(__dirname + '/' + "Register.htm");
-});
+var urlencodedParser = bodyParser.urlencoded({
+  extended: false
+})
 
 app.get('/', function (req, res) {
-    //Big O: 1
-    //sends user to signin page
-    res.sendFile(__dirname + "/" + "Login.htm");
+  res.sendFile(path.join(__dirname + '/login.htm'));
 });
 
-app.post('/register', urlencodedParser, function (req, res) {
-    //Big O: n
-    //puts user's username, password, and title (tutor or student) into table, depending on if they're are a student or tutor
-    let username = req.body.username;
-    let password = req.body.password;
-    let person = req.body.user;
-
-    if (person == 'tutor') {
-        let prom2 = findusername(db, username);
-        prom2.then(function (data) {
-            //Big O: 1
-            //runs if inputted username matches a username in the database
-            //sends page saying username already exists
-            res.send('This username already exists');
-        }).catch(function (err) {
-            //Big O: 1
-            //runs if inputted username does not match a username in the database and enters user information into database
-            db.run(`insert into tutor(username, password) VALUES ('${username}', '${password}')`);
-            res.sendFile(__dirname + "/" + "Login.htm");
-        });
-
-    } else {
-        let prom3 = findusernamestudent(db, username);
-        prom3.then(function (data) {
-            //Big O: 1
-            //runs if inputted username matches a username in the database
-            //sends page saying username already exists
-            res.send('This username already exists');
-        }).catch(function (err) {
-            //Big O: 1
-            //runs if inputted username does not match a username in the database and enters user information into database
-            db.run(`insert into login(username, password) VALUES ('${username}', '${password}')`);
-            res.sendFile(__dirname + "/" + "Login.htm");
-        });
-
-    };
-
-
+app.get('/register', function (req, res) {
+  res.sendFile(path.join(__dirname + '/register.htm'));
 });
 
-function findusername(db, username) {
-    //Big O: 1
-    //looks for username in database
-    let prom2 = new Promise(function (resolve, reject) {
-        //Big O: n
-        let usernameexists = false;
-        let data = undefined;
-        db.each(`SELECT * from tutor where username = '${username}'`, function (err, row) {
-            //sets variable data to be one row from a table from database
-            usernameexists = true;
-            data = row;
-        }, function (err) {
-            //Big O: 1
-            //if username exists it resolves the data from the database, if username doesn't exist it rejects false
-            if (!usernameexists) {
-                reject(false);
-            } else {
-                resolve(data);
-            }
-        });
+app.post('/create', urlencodedParser, function (req, res) {
+  // Prepare output in JSON format
+
+  let p = getRecords(db, req.body.username);
+  p.then(function (data) {
+    db.run(`INSERT INTO accounts(username,password) VALUES(?,?)`, [req.body.username, req.body.password], function (err) {
+      if (err) {
+        return console.log(err.message);
+      }
+      // get the last insert id
+      res.sendFile(path.join(__dirname + '/login.htm'));
     });
-    return prom2;
-}
 
-function findusernamestudent(db, username) {
-    //Big O: 1
-    //looks for username in database
-    let prom2 = new Promise(function (resolve, reject) {
-        //Big O: n
-        let usernameexists = false;
-        let data = undefined;
-        db.each(`SELECT * from login where username = '${username}'`, function (err, row) {
-            //Big O: 1
-            //sets variable data to be one row from a table from database
-            usernameexists = true;
-            data = row;
-        }, function (err) {
-            //Big O: 1
-            //if username exists it resolves the data from the database, if username doesn't exist it rejects false
-            if (!usernameexists) {
-                reject(false);
-            } else {
-                resolve(data);
-            }
-        });
-    });
-    return prom2;
-}
+  }).catch(function (data) {
+    res.send('Username is already taken');
+  });
+})
 
-app.post('/login', urlencodedParser, function (req, res) {
-    //Big O: n
-    //opens the starting page when the user submits their username and password
-    let username = req.body.username;
-    let password = req.body.password;
-    let prom = validate(username, password);
-    prom.then(function (resolve) {
-        //Big O: n
-        //renders the student page with the student's username
-        res.render("index", { username: username });
-    }).catch(function (err) {
-            //Big O: 1
-            //renders if username or password is incorrect
-            res.send("username or password is incorrect")
-        })
+app.post('/authenticate', urlencodedParser, function (req, res) {
+  // Prepare output in JSON format
+  let a = Login(db, req.body.username, req.body.password)
+  a.then(function(data){
+    res.sendFile(path.join(__dirname + '/Starting.htm'));
+  }).catch(function(data){
+    res.send('Incorrect username or password')
+  })
 
+})
+
+app.get('/start', function (req, res) {
+  res.sendFile(path.join(__dirname + '/Starting.htm'));
 });
 
-function studentlist() {
-    //Big O: 1
-    //puts the student table into a linked list
-    let stuprom = new Promise(function (resolve, reject) {
-        //Big O: n
-        //gets data from database
-        let students = new LList();
-        db.each(`SELECT * from login`,
-            function (err, row) {
-                //Big O: n
-                //add to linked list
-                students.add(row);
-            },
-            function (err, numRows) {
-                //Big O: 1
-                //resolve final linked list or rejects false if linked list doesn't exist
-                if (students.size() != 0) {
-                    resolve(students);
-                } else {
-                    reject(false);
-                }
-            });
-    })
-    return stuprom;
 
-
-}
-
-function validate(username, password) {
-    //Big O: 1
-    //validates student information for signin
-    let promval = new Promise(function (resolve, reject) {
-        //Big O: n
-        //gets data from database
-        let uname = false
-
-        db.each(`SELECT * from login where username ='${username}' and password = '${password}'`,
-            function (err, row) {
-                //Big O: 1
-                uname = true
-            },
-            function (err, numRows) {
-                //Big O: 1
-                if (uname) {
-                    resolve(true)
-                } else {
-                    reject(false)
-                }
-
-            });
-    })
-    return promval;
-}
-
-function validatetutor(username, password) {
-    //Big O: 1
-    //validates tutor information for signin
-    let promval = new Promise(function (resolve, reject) {
-        //Big O: n
-        //gets data from database
-        let uname = false
-
-        db.each(`SELECT * from tutor where username ='${username}' and password = '${password}'`,
-            function (err, row) {
-                //Big O: 1
-                uname = true
-            },
-            function (err, numRows) {
-                //Big O: 1
-                if (uname) {
-                    resolve(true)
-                } else {
-                    reject(false)
-                }
-
-            });
-    })
-    return promval;
-}
-
-let server = app.listen(8080, function () {
-    let host = server.address().address
-    let port = server.address().port
-    console.log('Listening on port 8080');
+app.get('/molecules', function (req, res) {
+  res.sendFile(path.join(__dirname + '/MoleculesOfLife.htm'));
 });
+
+app.get('/photo', function (req, res) {
+  res.sendFile(path.join(__dirname + '/Photosynthesis.htm'));
+});
+
+app.get('/resp', function (req, res) {
+  res.sendFile(path.join(__dirname + '/Respiration.htm'));
+});
+
+app.get('/genereg', function (req, res) {
+  res.sendFile(path.join(__dirname + '/GeneRegMitosisMeiosis.htm'));
+});
+
+app.get('/mend', function (req, res) {
+  res.sendFile(path.join(__dirname + '/MendelianGeneticsBiotech.htm'));
+});
+
+app.get('/evo', function (req, res) {
+  res.sendFile(path.join(__dirname + '/Evolution.htm'));
+});
+
+app.get('/nerv', function (req, res) {
+  res.sendFile(path.join(__dirname + '/Nervous+EndocrineSystems.htm'));
+});
+
+app.get('/immune', function (req, res) {
+  res.sendFile(path.join(__dirname + '/ImmuneSystemDevelopment.htm'));
+});
+
+app.get('/eco', function (req, res) {
+  res.sendFile(path.join(__dirname + '/Ecology.htm'));
+});
+
+
+
+function initDB( db ){
+db.serialize(function() {
+db.run('CREATE TABLE IF NOT EXISTS accounts(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username VARCHAR(256), password VARCHAR(256))');
+});
+}
+
+function getRecords( db, username ){
+ console.log('ENTER getRecords');
+
+ let prom = new Promise( function(resolve,reject) {
+   let found = false;
+   let rowData = [];
+   // async call
+   db.each(`SELECT * FROM accounts WHERE username = '${username}'`, function(err, row) {
+       found = true;
+   }, function( err, numRows ) {
+     if(!found){
+       resolve( true );
+     }
+     else{
+       reject(false);
+     }
+   });
+ })
+
+ return prom;
+}
+
+function Login( db, username, password ){
+ console.log('ENTER getRecords');
+
+ let lprom = new Promise( function(resolve,reject) {
+   let check = false;
+   let rowData = [];
+   // async call
+   db.each(`SELECT * FROM accounts WHERE username = '${username}' and password = '${password}'`, function(err, row) {
+       check = true;
+   }, function( err, numRows ) {
+     if(check){
+       resolve( true );
+     }
+     else{
+       reject(false);
+     }
+   });
+ })
+
+ return lprom;
+}
 
 initDB(db);
 
+io.on('connection', function (socket) {
+  socket.on('chat message', function (msg) {
+    io.emit('chat message', msg);
+  });
+});
+
+http.listen(8080, function () {
+  console.log('listening on *:8080');
+});
