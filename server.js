@@ -19,7 +19,7 @@ function initDB(db) {
     db.serialize(function () {
         //Big O: 1
         //create tutor table and student table in database
-        db.run('CREATE TABLE IF NOT EXISTS student(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name VARCHAR(256), username VARCHAR(256), password VARCHAR(256), subject VARCHAR(256), locationReq )');
+        db.run('CREATE TABLE IF NOT EXISTS login(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username VARCHAR(256), password VARCHAR(256), )');
     });
 }
 
@@ -66,7 +66,7 @@ app.post('/register', urlencodedParser, function (req, res) {
         }).catch(function (err) {
             //Big O: 1
             //runs if inputted username does not match a username in the database and enters user information into database
-            db.run(`insert into student(username, password) VALUES ('${username}', '${password}')`);
+            db.run(`insert into login(username, password) VALUES ('${username}', '${password}')`);
             res.sendFile(__dirname + "/" + "Login.htm");
         });
 
@@ -106,7 +106,7 @@ function findusernamestudent(db, username) {
         //Big O: n
         let usernameexists = false;
         let data = undefined;
-        db.each(`SELECT * from student where username = '${username}'`, function (err, row) {
+        db.each(`SELECT * from login where username = '${username}'`, function (err, row) {
             //Big O: 1
             //sets variable data to be one row from a table from database
             usernameexists = true;
@@ -134,28 +134,12 @@ app.post('/login', urlencodedParser, function (req, res) {
         //Big O: n
         //renders the student page with the student's username
         res.render("index", { username: username });
-    })
-        .catch(function (err) {
+    }).catch(function (err) {
             //Big O: 1
             //renders if username or password is incorrect
             res.send("username or password is incorrect")
         })
 
-});
-
-app.post('/userinput', urlencodedParser, function (req, res) {
-    //Big O: n
-    //enters the student's inputted location, subject, and username into the table
-    let location = req.body.location;
-    let subject = req.body.subject;
-    let username = req.body.username;
-    console.log(username);
-    console.log(subject + location);
-    db.run(`UPDATE student SET subject = '${subject}', locationReq = '${location}' WHERE username = '${username}'`);
-
-    res.send(JSON.stringify({
-        status: 'ok'
-    }))
 });
 
 function studentlist() {
@@ -165,7 +149,7 @@ function studentlist() {
         //Big O: n
         //gets data from database
         let students = new LList();
-        db.each(`SELECT * from student`,
+        db.each(`SELECT * from login`,
             function (err, row) {
                 //Big O: n
                 //add to linked list
@@ -194,7 +178,7 @@ function validate(username, password) {
         //gets data from database
         let uname = false
 
-        db.each(`SELECT * from student where username ='${username}' and password = '${password}'`,
+        db.each(`SELECT * from login where username ='${username}' and password = '${password}'`,
             function (err, row) {
                 //Big O: 1
                 uname = true
