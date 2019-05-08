@@ -2,8 +2,6 @@
 
 <head>
     <style>
-        
-
         #headertext {
             color: white;
             height: 30%;
@@ -11,13 +9,13 @@
             left: 0;
             top: 10%;
             text-align: center;
-            font-size: 200%;   
+            font-size: 200%;
             border: 2px solid black;
-            background-image: url( "static/molecules.png" );
-            background-size: 100% 100%;   
+            background-image: url("static/molecules.png");
+            background-size: 100% 100%;
         }
 
-        #htext{
+        #htext {
             position: absolute;
             width: 40%;
             left: 30%;
@@ -26,12 +24,13 @@
 
         #text {
             width: 60%;
-            position: absolute;;
+            position: absolute;
+            ;
             top: 35%;
             left: 10%;
         }
 
-        
+
         /* Dropdown Button */
         .dropbtn {
             top: 10px;
@@ -58,7 +57,7 @@
             min-width: 160px;
             box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
             z-index: 1;
-            font-size: 50%;            
+            font-size: 50%;
 
         }
 
@@ -85,202 +84,231 @@
             background-color: #3e8e41;
         }
 
-        .chapter{
+        .chapter {
             border-bottom: 2px solid black;
             font-size: 200%;
             font-display: bold;
         }
-        .term{
+
+        .term {
             width: 48%;
             display: inline-block;
         }
-        .def{
+
+        .def {
             width: 48%;
             display: inline-block;
             background-color: black;
         }
-        .spacer{
+
+        .spacer {
             height: 10px;
             border-bottom: 1px solid black;
         }
-        .bigspacer{
+
+        .bigspacer {
             height: 40px;
         }
-        #def8h{
+
+        #def8h {
             background-color: white;
         }
-        
     </style>
 
 </head>
 
 <body>
-   
-        
 
-    <div id="headertext"> <div id = 'htext'> Molecules of Life </div>
-            <div class="dropdown">
-                    <button class="dropbtn">Menu</button>
-                    <div class="dropdown-content">
-                            <a href="Starting.htm">Home Page</a>
-                            <a href="MoleculesOfLife.htm">Molecules of Life</a>
-                            <a href="Photosynthesis.htm">Metabolism and Photosynthesis</a>
-                            <a href="Respiration.htm">Aerobic Respiration, Molecular Gen</a>
-                            <a href="GeneRegMitosisMeiosis.htm">Gene Regulation, Mitosis, Meiosis</a>
-                            <a href="MendelianGeneticsBiotech.htm">Mendelian Genetics, Biotech</a>
-                            <a href="Evolution.htm">Evolution</a>
-                            <a href="Nervous+EndocrineSystems.htm">Nervous and Endocrine System</a>
-                            <a href="ImmuneSystemDevelopment.htm">Immune System and Development</a>
-                            <a href="Ecology.htm">Ecology</a>
-                    </div>
-                </div>
+
+
+    <div id="headertext">
+        <div id='htext'> Molecules of Life </div>
+        <div class="dropdown">
+            <button class="dropbtn">Menu</button>
+            <div class="dropdown-content">
+                <a href="/start">Home Page</a>
+                <a href="/molecules">Molecules of Life</a>
+                <a href="/photo">Metabolism and Photosynthesis</a>
+                <a href="/resp">Aerobic Respiration, Molecular Gen</a>
+                <a href="/genereg">Gene Regulation, Mitosis, Meiosis</a>
+                <a href="/mend">Mendelian Genetics, Biotech</a>
+                <a href="/evo">Evolution</a>
+                <a href="/nerv">Nervous and Endocrine System</a>
+                <a href="/immune">Immune System and Development</a>
+                <a href="/eco">Ecology</a>
+            </div>
+        </div>
     </div>
 
-    
-    
-    <div id="text"> 
-        <div id = 'chapter1' class = 'chapter'> Chapter 1: Invitation to Biology </div>
-            <div class = 'bigspacer'></div>
-            <div class = 'bigspacer'> Click the black boxes to reveal the definitions. </div>
-            <div class = 'spacer'></div>
 
-            <div id = 'term1' class = 'term'> Biology </div>
-            <div id = 'def1' class = 'def' onclick = 'reveal(1)'> The scientific study of life. </div>
 
-            <div class = 'spacer'></div>
+    <div id="text">
+        <div id='chapter1' class='chapter'> Chapter 1: Invitation to Biology </div>
+        <div class='bigspacer'></div>
+        <div class='bigspacer'> Click the black boxes to reveal the definitions. </div>
+        <div class='spacer'></div>
 
-            <div id = 'term2' class = 'term'> Emergent Properties </div>
-            <div id = 'def2' class = 'def' onclick = 'reveal(2)'> A charactertistic of a system that does not appear in any of the system's parts. </div>
+        <div id='term1' class='term'> Biology </div>
+        <div id='def1' class='def' onclick='reveal(1)'> The scientific study of life. </div>
 
-            <div class = 'spacer'></div>
+        <div class='spacer'></div>
 
-            <div id = 'term3' class = 'term'> Life's organizational levels </div>
-            <div id = 'def3' class = 'def' onclick = 'reveal(3)'> 
-                    <div> 1) Atoms: The building block of life.</div> 
-                    <div> 2) Molecules: Atoms joined with chemical bonds.</div>
-                    <div> 3) Cells: The smallest unit of life. </div>
-                    <div> 4) Tissues: An organized array of cells. </div>
-                    <div> 5) Organs: Structural unit of interacting tissues. </div>
-                    <div> 6) Organ System: A set of interacting organs. </div>
-                    <div> 7) Multicelled Organism: Individual consisting of one or more cells. </div>
-                    <div> 8) Population: Group of organism of a given species in an area. </div>
-                    <div> 9) Community: Group of populations in an area. </div>
-                    <div> 10) Ecosystem: Community acting with its environment (Energy flow and nutrient cycle). </div>
-                    <div> 11) Biosphere: All ecosystems on earth. </div>
+        <div id='term2' class='term'> Emergent Properties </div>
+        <div id='def2' class='def' onclick='reveal(2)'> A charactertistic of a system that does not appear in any of the
+            system's parts. </div>
+
+        <div class='spacer'></div>
+
+        <div id='term3' class='term'> Life's organizational levels </div>
+        <div id='def3' class='def' onclick='reveal(3)'>
+            <div> 1) Atoms: The building block of life.</div>
+            <div> 2) Molecules: Atoms joined with chemical bonds.</div>
+            <div> 3) Cells: The smallest unit of life. </div>
+            <div> 4) Tissues: An organized array of cells. </div>
+            <div> 5) Organs: Structural unit of interacting tissues. </div>
+            <div> 6) Organ System: A set of interacting organs. </div>
+            <div> 7) Multicelled Organism: Individual consisting of one or more cells. </div>
+            <div> 8) Population: Group of organism of a given species in an area. </div>
+            <div> 9) Community: Group of populations in an area. </div>
+            <div> 10) Ecosystem: Community acting with its environment (Energy flow and nutrient cycle). </div>
+            <div> 11) Biosphere: All ecosystems on earth. </div>
+        </div>
+
+        <div class='spacer'></div>
+
+        <div id='term4' class='term'> Energy and Nutrients </div>
+        <div id='def4' class='def' onclick='reveal(4)'> Are needed by all organisms to survive. <div>Producers (plants)
+                use energy from environment and simple materials to make food, via photosynthesis. </div>
+            <div> Consumers (animals) cannot make their own food, so they gain energy and nutrients from other
+                organisms. </div>
+        </div>
+
+        <div class='spacer'></div>
+
+        <div id='term5' class='term'> Homeostasis </div>
+        <div id='def5' class='def' onclick='reveal(5)'> Organism keeping internal conditions within liveable conditions
+        </div>
+
+        <div class='spacer'></div>
+
+        <div id='term6' class='term'> DNA </div>
+        <div id='def6' class='def' onclick='reveal(6)'> Nucleic acid which contains hereditary information and guides
+            the following biological processes: <div> 1) Development: Cell of new individual becomes a multicelled
+                adult. </div>
+            <div> 2) Growth: Organism's cell size, volume, and number increases. </div>
+            <div> 3) Reproduction: Producing offspring, which inherit parent's DNA. </div>
+        </div>
+
+        <div class='spacer'></div>
+
+        <div id='term7' class='term'> Biodiversity </div>
+        <div id='def7' class='def' onclick='reveal(7)'> Variation among organisms. <div> Prokaryotes: Bacteria and
+                Archaea, organisms that lack a nucleus. </div>
+            <div> Eukaryotes: Protists, Fungi, Plants, Animals, organisms that have a nucleus. </div>
+        </div>
+
+        <div class='spacer'></div>
+
+        <div id='term8' class='term'> Taxonomy </div>
+        <div id='def8' class='def' onclick='reveal(8)'> Naming and classifying a new species. A Linnean name consists of
+            two parts, the genus and a specific epithet. Today, we separate species by the following taxa: domain,
+            kingdom, phylum, class, order, family, genus, and species.
+            <div id='hint8'> </div>
+        </div>
+        <div id='term8h' class='term'> </div>
+        <div id='def8h' class='def'> <button id='term8b' onclick='term8b()'> Hint </button> </div>
+
+        <div class='spacer'></div>
+
+        <div id='term9' class='term'> Critical thinking </div>
+        <div id='def9' class='def' onclick='reveal(9)'> Judging the quality of information before accepting it. </div>
+
+        <div class='spacer'></div>
+
+        <div id='term10' class='term'> Types of Reasoning </div>
+        <div id='def10' class='def' onclick='reveal(10)'> Inductive Reasoning: Drawing a conclusion based on an
+            observation. <div> Deductive Reasoning: Using a general idea to make a conclusion about a specific case.
             </div>
+        </div>
 
-            <div class = 'spacer'></div>
+        <div class='spacer'></div>
 
-            <div id = 'term4' class = 'term'> Energy and Nutrients </div>
-            <div id = 'def4' class = 'def' onclick = 'reveal(4)'> Are needed by all organisms to survive. <div>Producers (plants) use energy from environment and simple materials to make food, via photosynthesis. </div> <div> Consumers (animals) cannot make their own food, so they gain energy and nutrients from other organisms. </div> </div>
+        <div id='term11' class='term'> Parts of an Experiment </div>
+        <div id='def11' class='def' onclick='reveal(11)'>
+            Hypothesis: A testable explanation for a natural phenomenon.
+            <div> Prediction: A statement of some condition that should exist if the hypothesis is correct. </div>
+            <div> Independent Variable: Variable controlled during the experiment. </div>
+            <div> Dependent Variable: Variable being observed in the experiment. </div>
+            <div> Control: Group of individuals not exposed to the variable being tested. </div>
+        </div>
 
-            <div class = 'spacer'></div>
+        <div class='spacer'></div>
 
-            <div id = 'term5' class = 'term'> Homeostasis </div>
-            <div id = 'def5' class = 'def' onclick = 'reveal(5)'> Organism keeping internal conditions within liveable conditions</div>
+        <div id='term12' class='term'> Sampling Error </div>
+        <div id='def12' class='def' onclick='reveal(12)'> Error caused by testing a small subset of a group that does
+            not accurately represent the larger group. </div>
 
-            <div class = 'spacer'></div>
+        <div class='spacer'></div>
 
-            <div id = 'term6' class = 'term'> DNA </div>
-            <div id = 'def6' class = 'def' onclick = 'reveal(6)'> Nucleic acid which contains hereditary information and guides the following biological processes: <div> 1) Development: Cell of new individual becomes a multicelled adult.  </div> <div> 2) Growth: Organism's cell size, volume, and number increases.  </div> <div> 3) Reproduction: Producing offspring, which inherit parent's DNA. </div> </div>
+        <div id='term13' class='term'> Statistically Significant </div>
+        <div id='def13' class='def' onclick='reveal(13)'> A result that is statistically unlikely to have occured by
+            chance. </div>
 
-            <div class = 'spacer'></div>
+        <div class='spacer'></div>
 
-            <div id = 'term7' class = 'term'> Biodiversity </div>
-            <div id = 'def7' class = 'def' onclick = 'reveal(7)'> Variation among organisms. <div> Prokaryotes: Bacteria and Archaea, organisms that lack a nucleus. </div> <div> Eukaryotes: Protists, Fungi, Plants, Animals, organisms that have a nucleus.  </div> </div>
+        <div id='term14' class='term'> Law of Nature </div>
+        <div id='def14' class='def' onclick='reveal(14)'> A consistent natural phenomenon for which there is incomplete
+            scientific explanation. </div>
 
-            <div class = 'spacer'></div>
+        <div class='spacer'></div>
 
-            <div id = 'term8' class = 'term'> Taxonomy </div>
-            <div id = 'def8' class = 'def' onclick = 'reveal(8)'> Naming and classifying a new species. A Linnean name consists of two parts, the genus and a specific epithet. Today, we separate species by the following taxa: domain, kingdom, phylum, class, order, family, genus, and species.  
-                <div id = 'hint8'> </div>
-            </div>
-            <div id = 'term8h' class = 'term'>  </div>
-            <div id = 'def8h' class = 'def' > <button id = 'term8b' onclick = 'term8b()'> Hint </button> </div>
-            
-            <div class = 'spacer'></div>
+        <div id='term15' class='term'> Scientific Theory </div>
+        <div id='def15' class='def' onclick='reveal(15)'> Hypothesis that has not been disproven after years of rigorous
+            testing. </div>
 
-            <div id = 'term9' class = 'term'> Critical thinking </div>
-            <div id = 'def9' class = 'def' onclick = 'reveal(9)'> Judging the quality of information before accepting it. </div>
+        <div class='spacer'></div>
 
-            <div class = 'spacer'></div>
+        <div class='bigspacer'> </div>
 
-            <div id = 'term10' class = 'term'> Types of Reasoning </div>
-            <div id = 'def10' class = 'def' onclick = 'reveal(10)'> Inductive Reasoning: Drawing a conclusion based on an observation. <div> Deductive Reasoning: Using a general idea to make a conclusion about a specific case.</div> </div>
+        <button onclick="hide()"> Click to cover definitions. </button>
 
-            <div class = 'spacer'></div>
+        <div class='bigspacer'> </div>
 
-            <div id = 'term11' class = 'term'> Parts of an Experiment </div>
-            <div id = 'def11' class = 'def' onclick = 'reveal(11)'> 
-                Hypothesis: A testable explanation for a natural phenomenon.
-                <div> Prediction: A statement of some condition that should exist if the hypothesis is correct. </div>
-                <div> Independent Variable: Variable controlled during the experiment. </div>
-                <div> Dependent Variable: Variable being observed in the experiment. </div>
-                <div> Control: Group of individuals not exposed to the variable being tested. </div>
-            </div>
+        <div id='chapter2' class='chapter'> Chapter 2: Life's Chemical Basis </div>
 
-            <div class = 'spacer'></div>
+        <div class='bigspacer'> </div>
 
-            <div id = 'term12' class = 'term' > Sampling Error </div>
-            <div id = 'def12' class = 'def' onclick = 'reveal(12)'> Error caused by testing a small subset of a group that does not accurately represent the larger group. </div>
+        <div id='chapter3' class='chapter'> Chapter 3: Molecules of Life </div>
 
-            <div class = 'spacer'></div>
+        <div class='bigspacer'> </div>
 
-            <div id = 'term13' class = 'term' > Statistically Significant </div>
-            <div id = 'def13' class = 'def' onclick = 'reveal(13)'> A result that is statistically unlikely to have occured by chance. </div>
+        <div id='chapter4' class='chapter'> Chapter 4: Cell Strucutre and Function </div>
 
-            <div class = 'spacer'></div>
-
-            <div id = 'term14' class = 'term' > Law of Nature </div>
-            <div id = 'def14' class = 'def' onclick = 'reveal(14)'> A consistent natural phenomenon for which there is incomplete scientific explanation. </div>
-
-            <div class = 'spacer'></div>
-
-            <div id = 'term15' class = 'term'> Scientific Theory </div>
-            <div id = 'def15' class = 'def' onclick = 'reveal(15)'> Hypothesis that has not been disproven after years of rigorous testing. </div>
-
-            <div class = 'spacer'></div>
-
-            <div class = 'bigspacer'> </div>
-
-            <button onclick = "hide()"> Click to cover definitions. </button>
-
-            <div class = 'bigspacer'> </div>
-
-        <div id = 'chapter2' class = 'chapter'> Chapter 2: Life's Chemical Basis </div>
-
-            <div class = 'bigspacer'> </div>
-
-        <div id = 'chapter3' class = 'chapter'> Chapter 3: Molecules of Life </div>
-            
-            <div class = 'bigspacer'> </div>
-
-        <div id = 'chapter4' class = 'chapter'> Chapter 4: Cell Strucutre and Function </div>
-
-            <div class = 'bigspacer'> </div>
+        <div class='bigspacer'> </div>
 
     </div>
 
     <script>
         let term8 = 0;
 
-        function term8b(){
-            if(term8 % 2 == 0){
-            document.getElementById('hint8').innerText = " Hint: An acronym to remember the naming system: Dumb Kids Playing Chess On Freeways Get Smooshed!"
-            document.getElementById('term8b').innerText = "Hide"
-            }else{
-            document.getElementById('hint8').innerText = " "
-            document.getElementById('term8b').innerText = "Hint"
+        function term8b() {
+            if (term8 % 2 == 0) {
+                document.getElementById('hint8').innerText =
+                    " Hint: An acronym to remember the naming system: Dumb Kids Playing Chess On Freeways Get Smooshed!"
+                document.getElementById('term8b').innerText = "Hide"
+            } else {
+                document.getElementById('hint8').innerText = " "
+                document.getElementById('term8b').innerText = "Hint"
             }
             term8++;
         }
 
-        function reveal(num){
+        function reveal(num) {
             let string = "def" + num;
             document.getElementById(string).style.backgroundColor = "white";
         }
 
-        function hide(){
+        function hide() {
             document.getElementById("def1").style.backgroundColor = "black";
             document.getElementById("def2").style.backgroundColor = "black";
             document.getElementById("def3").style.backgroundColor = "black";
