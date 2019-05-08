@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "chat page",
   "dependencies": {
+    "socket.io": "^2.2.0",
     "sqlite": "^3.0.3"
   }
 }
