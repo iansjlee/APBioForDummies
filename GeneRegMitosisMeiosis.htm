@@ -2,12 +2,10 @@
 
 <head>
     <style>
-        
-
         #headertext {
             height: 30%;
             width: 100%;
-         
+
             text-align: center;
             font-size: 200%;
 
@@ -48,7 +46,7 @@
             min-width: 160px;
             box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
             z-index: 1;
-            font-size: 50%;            
+            font-size: 50%;
 
         }
 
@@ -106,10 +104,12 @@
             background-color: white;
             width: 24%;
         }
-        #def5hh{
+
+        #def5hh {
             background-color: white;
             width: 24%;
         }
+
         #container {
             background-color: white;
             width: 0%;
@@ -117,41 +117,51 @@
             position: fixed;
             top: 2px;
             left: 2px;
+            display: none;
         }
 
         #X {
             position: absolute;
             top: 0;
             right: 0;
+        }
+
         #drawingpane {
             width: 1600px;
             height: 400px;
+            border: 2px solid black;
         }
     </style>
 
 </head>
 
 <body>
-    
 
-    
-    <div id="headertext"> Gene Control, Mitosis, Meiosis
-            <div class="dropdown">
-                    <button class="dropbtn">Menu</button>
-                    <div class="dropdown-content">
-                        <a href="Starting.htm">Home Page</a>
-                        <a href="MoleculesOfLife.htm">Molecules of Life</a>
-                        <a href="Photosynthesis.htm">Metabolism and Photosynthesis</a>
-                        <a href="Respiration.htm">Aerobic Respiration, Molecular Gen</a>
-                        <a href="GeneRegMitosisMeiosis.htm">Gene Regulation, Mitosis, Meiosis</a>
-                        <a href="MendelianGeneticsBiotech.htm">Mendelian Genetics, Biotech</a>
-                        <a href="Evolution.htm">Evolution</a>
-                        <a href="Nervous+EndocrineSystems.htm">Nervous and Endocrine System</a>
-                        <a href="ImmuneSystemDevelopment.htm">Immune System and Development</a>
-                        <a href="Ecology.htm">Ecology</a>
-                    </div>
-                </div>
+
+
+    <div id="headertext"> Gene Control, Mitosis, Meiosis (Chapters 10-12)
+        <div class="dropdown">
+            <button class="dropbtn">Menu</button>
+            <div class="dropdown-content">
+                <a href="Starting.htm">Home Page</a>
+                <a href="MoleculesOfLife.htm">Molecules of Life</a>
+                <a href="Photosynthesis.htm">Metabolism and Photosynthesis</a>
+                <a href="Respiration.htm">Aerobic Respiration, Molecular Gen</a>
+                <a href="GeneRegMitosisMeiosis.htm">Gene Regulation, Mitosis, Meiosis</a>
+                <a href="MendelianGeneticsBiotech.htm">Mendelian Genetics, Biotech</a>
+                <a href="Evolution.htm">Evolution</a>
+                <a href="Nervous+EndocrineSystems.htm">Nervous and Endocrine System</a>
+                <a href="ImmuneSystemDevelopment.htm">Immune System and Development</a>
+                <a href="Ecology.htm">Ecology</a>
+            </div>
+        </div>
     </div>
+
+    <button id='startanimation' onclick='lick()'>Start Animation</button>
+
+    <canvas id='drawingpane'></canvas>
+    <div id='DStrand'></div>
+
     <div id="text">
         <div id='chapter10' class='chapter'> Chapter 10: Gene Control </div>
 
@@ -180,8 +190,9 @@
         <div id='def5' class='def' onclick='reveal(5)'> Nuclear division mechanism that eukaryotes use to produce more
             cells while maintaining the same number of chromosones. </div>
         <div id='term5h' class='term'> </div>
-        <div id='def5h' class='def'> <button id='term5b' onclick='mitose()'> Animation </button> </div>
-        <div id='def5hh' class = 'def'> <button id='term5bb' onclick='close()'>Close Animation</button></div>
+
+        <button id='term5b' onclick='mitose()'> Animation </button>
+        <button id=' term5bb' onclick='closeanimation()'> Close Animation</button>
 
 
         <div class='bigspacer'> </div>
@@ -191,7 +202,11 @@
         <div class='bigspacer'> </div>
     </div>
 
-    <div id='container' >
+    <div id='container'>
+        <iframe id="ytplayer" type="text/html" width="720" height="405"
+            src="https://www.youtube.com/watch?v=C6hn3sA0ip0" frameborder="0" allowfullscreen>
+
+        </iframe>
     </div>
 
     <script>
@@ -224,43 +239,15 @@
             document.getElementById('container').style.width = "50%";
             document.getElementById('container').style.height = "50%";
             document.getElementById('container').style.border = "2px solid black";
+            document.getElementById('container').style.display = 'block';
         }
 
-        function close(){
-            console.log("worked")
+        function closeanimation() {
+            document.getElementById('container').style.display = 'none';
         }
 
-   
 
-    <div id="headertext"> 
-            <div class="dropdown">
-                    <button class="dropbtn">Menu</button>
-                    <div class="dropdown-content">
-                        <a href="Starting.htm">Home Page</a>
-                        <a href="MoleculesOfLife.htm">Molecules of Life</a>
-                        <a href="Photosynthesis.htm">Metabolism and Photosynthesis</a>
-                        <a href="Respiration.htm">Aerobic Respiration, Molecular Gen</a>
-                        <a href="GeneRegMitosisMeiosis.htm">Gene Regulation, Mitosis, Meiosis</a>
-                        <a href="MendelianGeneticsBiotech.htm">Mendelian Genetics, Biotech</a>
-                        <a href="Evolution.htm">Evolution</a>
-                        <a href="Nervous+EndocrineSystems.htm">Nervous and Endocrine System</a>
-                        <a href="ImmuneSystemDevelopment.htm">Immune System and Development</a>
-                        <a href="Ecology.htm">Ecology</a>
-                    </div>
-                </div>
-        
-        Gene Regulation, Mitosis, Meiosis (Chapters 10-12)
 
-    </div>
-    <div id="text"> P. OVIDI NASONIS METAMORPHOSEON LIBER PRIMVS
-    </div>
-
-    <button id='startanimation' onclick='lick()'>Start Animation</button>
-
-    <canvas id='drawingpane'></canvas>
-    <div id='DStrand'></div>
-
-    <script>
         /*
         function drawcurve() {
             var counter = 0;
@@ -273,53 +260,107 @@
             }
         }
         */
+        canvas = document.getElementById('drawingpane');
+
         let rects = [];
         let drawing = null;
         let SineCurve = {
-            x: 20,
-            y: 100,
+            x: null,
+            y: null,
             graphic: null,
-            move: function () {
-                var counter = 0;
-                var increase = 2 * Math.PI / 100;
-                for (i = 0; i <= 1; i += 0.01) {
-                    x = i;
-                    y = Math.sin(counter);
-                    counter += increase;
+
+            render: function (ctx) {
+                console.log(this.color)
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+
+                for (x = 0; x <= 720; x += 1) {
+                    y = 180.0 - .3 * (Math.sin(1.5 * x * Math.PI / 180) * 120);
+                    ctx.lineTo(x, y);
                 }
+                ctx.moveTo(0, 180);
+                for (x = -120; x <= 600; x += 1) {
+                    y = 180.0 - .3 * (Math.sin(1.5 * x * Math.PI / 180) * 120);
+                    ctx.lineTo(x + 120, y);
+                }
+                ctx.stroke();
             }
         }
-        let shape = SineCurve;
+        let Base = {
 
-        /* function initialize() {
-             SineCurve.graphic = document.getElementById('DStrand')
-         }
-         initialize();
-         */
+            x: 25,
+            y: 157,
+            width: 5,
+            height: 40,
+            color: "red",
+            graphic: null,
+
+            render: function (ctx) {
+                ctx.fillStyle = this.color;
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+
+            }
+
+        }
+
+        function initialize() {
+            SineCurve.graphic = document.getElementById('DStrand')
+            resetCanvas();
+
+        }
+
         function lick() {
-            console.log("sugma ballz")
-            drawing = Object.assign({}, shape);
-            rects.push(drawing)
+            drawing = Object.assign({}, SineCurve);
+            for (j = 0; j < 6; j++) {
+                for (i = 0; i < 3; i++) {
+                    DNA = Object.assign({}, Base);
+                    DNA.x = DNA.x + (12 * i) + 120 * j;
+                    DNA.y = DNA.y - (5 * i);
+                    // DNA.height = .5*(180.0 - .3 * (Math.sin(1.5 * DNA.x * Math.PI / 180) * 120));
+                    DNA.height = DNA.height + (11 * i) + (i ^ 3) * 2;
+
+                    rects.push(DNA);
+                }
+            }
+            for (j = 0; j < 6; j++) {
+                for (i = 0; i < 3; i++) {
+                    DNA = Object.assign({}, Base);
+                    DNA.x = DNA.x + 60;
+                    DNA.x = DNA.x - (12 * i) + 120 * j;
+                    DNA.y = DNA.y - (5 * i);
+                    DNA.height = DNA.height + (12 * i) + (i ^ 3) * 2 + 3;
+                    rects.push(DNA);
+                }
+            }
+            rects.push(drawing);
+            console.log(rects);
+            initialize();
+            setTimeout(unwind, 5000);
+
+
+        }
+
+        function unwind() {
+            Topoisemerase = Object.assign({}, Base);
+            Topoisemerase.x = 720;
+            Topoisemerase.height = 80;
+            Topoisemerase.width = 70;
+            Topoisemerase.y = 140;
+            rects.push(Topoisemerase);
+            initialize();
+            for (i = 0; i < 10; i += 0.1) {
+                Topoisemerase
+            }
         }
 
         function drawPane() {
-          //  ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.rect(0, 0, canvas.width, canvas.height);
-            //ctx.stroke();
-
-
             for (let i = 0; i < rects.length; i++) {
                 rects[i].render(ctx)
             }
 
-
-            if (drawing != null) {
-                drawing.render(ctx);
-            }
         }
 
         function resetCanvas() {
-            canvas = document.getElementById('drawingpane');
             canvas.width = canvas.clientWidth;
             canvas.height = canvas.clientHeight;
 
