@@ -5,11 +5,12 @@
         #headertext {
             height: 30%;
             width: 100%;
-
             text-align: center;
             font-size: 200%;
 
+
             background-image: url('/static/mitose.png');
+
             background-size: 100% 100%;
             border: 2px solid black;
         }
@@ -47,7 +48,6 @@
             box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
             z-index: 1;
             font-size: 50%;
-
         }
 
         /* Links inside the dropdown */
@@ -56,7 +56,6 @@
             padding: 12px 16px;
             text-decoration: none;
             display: block;
-
         }
 
         /* Change color of dropdown links on hover */
@@ -131,13 +130,18 @@
             height: 400px;
             border: 2px solid black;
         }
-    </style>
 
+        #pause {
+            display: none;
+        }
+
+        #resume {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
-
-
 
     <div id="headertext"> Gene Control, Mitosis, Meiosis (Chapters 10-12)
         <div class="dropdown">
@@ -159,9 +163,12 @@
     </div>
 
     <button id='startanimation' onclick='lick()'>Start Animation</button>
+    <button id='pause' onclick='pau()'>Pause</button>
+    <button id='resume' onclick='resume()'>Resume</button>
 
     <canvas id='drawingpane'></canvas>
     <div id='DStrand'></div>
+    <div id='Topo' display='inline-block' position='absolute'> </div>
 
     <div id="text">
         <div id='chapter10' class='chapter'> Chapter 10: Gene Control </div>
@@ -192,8 +199,8 @@
             cells while maintaining the same number of chromosones. </div>
         <div id='term5h' class='term'> </div>
 
-        <button id='term5b' onclick='mitose()'> Animation </button>
-        <button id=' term5bb' onclick='closeanimation()'> Close Animation</button>
+        <button id='term5b' onclick='mitose()'> Video </button>
+        <button id=' term5bb' onclick='closeanimation()'> Close Video</button>
 
 
         <div class='bigspacer'> </div>
@@ -202,12 +209,8 @@
 
         <div class='bigspacer'> </div>
     </div>
-
     <div id='container'>
-        <iframe id="ytplayer" type="text/html" width="720" height="405"
-            src="https://www.youtube.com/watch?v=C6hn3sA0ip0" frameborder="0" allowfullscreen>
-
-        </iframe>
+        <div id='player'> </div>
     </div>
 
     <script>
@@ -234,6 +237,20 @@
             document.getElementById("def15").style.backgroundColor = "black";
         }
 
+        var tag = document.createElement('script');
+        tag.src = "http://www.youtube.com/player_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '405',
+                width: '720',
+                videoId: 'C6hn3sA0ip0',
+            });
+        }
 
 
         function mitose() {
@@ -241,37 +258,25 @@
             document.getElementById('container').style.height = "50%";
             document.getElementById('container').style.border = "2px solid black";
             document.getElementById('container').style.display = 'block';
+            player.playVideo();
+
+
         }
 
         function closeanimation() {
+            player.pauseVideo();
             document.getElementById('container').style.display = 'none';
+
         }
 
-
-
-        /*
-        function drawcurve() {
-            var counter = 0;
-            var increase = Math.PI / 100;
-
-            for (i = 0; i <= 1; i += 0.01) {
-                x = i;
-                y = Math.sin(counter);
-                counter += increase;
-            }
-        }
-        */
         canvas = document.getElementById('drawingpane');
 
         let rects = [];
-        let drawing = null;
         let SineCurve = {
             x: null,
             y: null,
             graphic: null,
-
             render: function (ctx) {
-                console.log(this.color)
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
 
@@ -288,70 +293,189 @@
             }
         }
         let Base = {
-
             x: 25,
             y: 157,
             width: 5,
             height: 40,
             color: "red",
+            text: "",
+            location: null,
             graphic: null,
 
             render: function (ctx) {
                 ctx.fillStyle = this.color;
+                canvas.text = "bold 14px verdana, sans-serif";
+                this.text.color = 'blue';
+                ctx.fillText(this.text, this.x, this.y);
                 ctx.fillRect(this.x, this.y, this.width, this.height);
-
             }
-
         }
 
         function initialize() {
             SineCurve.graphic = document.getElementById('DStrand')
             resetCanvas();
-
         }
 
         function lick() {
+            document.getElementById('startanimation').style.display = 'none';
+            document.getElementById('pause').style.display = 'block';
+            
             drawing = Object.assign({}, SineCurve);
             for (j = 0; j < 6; j++) {
                 for (i = 0; i < 3; i++) {
                     DNA = Object.assign({}, Base);
                     DNA.x = DNA.x + (12 * i) + 120 * j;
                     DNA.y = DNA.y - (5 * i);
-                    // DNA.height = .5*(180.0 - .3 * (Math.sin(1.5 * DNA.x * Math.PI / 180) * 120));
-                    DNA.height = DNA.height + (11 * i) + (i ^ 3) * 2;
-
+                    DNA.height = .5 * (DNA.height + (11 * i) + (i ^ 3) * 2);
+                    if (Math.random() > 0.75) {
+                        DNA.color = 'blue';
+                    } else if (Math.random() > 0.5) {
+                        DNA.color = 'yellow';
+                    } else if (Math.random() > 0.25) {
+                        DNA.color = 'green';
+                    }
+                    DNA.location = 'top';
                     rects.push(DNA);
+
+                    DNA2 = Object.assign({}, Base);
+                    DNA2.x = DNA2.x + (12 * i) + 120 * j;
+                    DNA2.y = DNA.y + DNA.height;
+                    DNA2.height = .5 * (DNA2.height + (11 * i) + (i ^ 3) * 2);
+                    if (DNA.color == 'red') {
+                        DNA2.color = 'green';
+                    } else if (DNA.color == 'green') {
+                        DNA2.color = 'red';
+                    } else if (DNA.color == 'yellow') {
+                        DNA2.color = 'blue';
+                    } else {
+                        DNA2.color = 'yellow'
+                    }
+                    DNA2.location = 'bottom';
+                    rects.push(DNA2);
                 }
             }
+
             for (j = 0; j < 6; j++) {
                 for (i = 0; i < 3; i++) {
                     DNA = Object.assign({}, Base);
                     DNA.x = DNA.x + 60;
                     DNA.x = DNA.x - (12 * i) + 120 * j;
                     DNA.y = DNA.y - (5 * i);
-                    DNA.height = DNA.height + (12 * i) + (i ^ 3) * 2 + 3;
+                    DNA.height = .5 * (DNA.height + (12 * i) + (i ^ 3) * 2 + 3);
+                    if (Math.random() > 0.75) {
+                        DNA.color = 'blue';
+                    } else if (Math.random() > 0.5) {
+                        DNA.color = 'yellow';
+                    } else if (Math.random() > 0.25) {
+                        DNA.color = 'green';
+                    }
+                    DNA.location = 'top';
                     rects.push(DNA);
+
+                    DNA2 = Object.assign({}, Base);
+                    DNA2.x = DNA2.x + 60;
+                    DNA2.x = DNA2.x - (12 * i) + 120 * j;
+                    DNA2.y = DNA.y + DNA.height;
+                    DNA2.height = .5 * (DNA2.height + (12 * i) + (i ^ 3) * 2 + 3);
+                    if (DNA.color == 'red') {
+                        DNA2.color = 'green';
+                    } else if (DNA.color == 'green') {
+                        DNA2.color = 'red';
+                    } else if (DNA.color == 'yellow') {
+                        DNA2.color = 'blue';
+                    } else {
+                        DNA2.color = 'yellow'
+                    }
+                    DNA2.location = 'bottom';
+                    rects.push(DNA2);
                 }
             }
+
+
             rects.push(drawing);
-            console.log(rects);
             initialize();
-            setTimeout(unwind, 5000);
+            setTimeout(unwind(), 2000);
+        }
+        let go = true;
 
-
+        function pau() {
+            document.getElementById('pause').style.display = 'none';
+            document.getElementById('resume').style.display = 'block';
+            document.getElementById('resume').style.backgroundColor = 'green';
+            go = false;
         }
 
+        function resume() {
+            document.getElementById('resume').style.display = 'none';
+            document.getElementById('pause').style.display = 'block';
+            go = true;
+            window.requestAnimationFrame(unwind);
+        }
+        let temp = 0;
+
         function unwind() {
-            Topoisemerase = Object.assign({}, Base);
-            Topoisemerase.x = 720;
-            Topoisemerase.height = 80;
-            Topoisemerase.width = 70;
-            Topoisemerase.y = 140;
-            rects.push(Topoisemerase);
-            initialize();
-            for (i = 0; i < 10; i += 0.1) {
-                Topoisemerase
+            if (go == true) {
+                if (temp < 244) {
+                    temp = temp + 1;
+                    window.requestAnimationFrame(unwind);
+                    if (temp > 1) {
+                        rects.pop();
+                        rects.pop();
+                    }
+
+                    Border = Object.assign({}, Base);
+                    Border.x = 720 - 3 * temp;
+                    Border.y = 140;
+                    Border.height = 80;
+                    Border.width = 70;
+                    Border.color = 'black';
+                    Topoisemerase = Object.assign({}, Base);
+                    Border.text = "Topoisemerase";
+                    Topoisemerase.x = Border.x + 5;
+                    Topoisemerase.height = Border.height - 10;
+                    Topoisemerase.width = Border.width - 10;
+                    Topoisemerase.y = Border.y + 5;
+
+                    rects.push(Border);
+                    rects.push(Topoisemerase);
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(720, 140);
+                    console.log(temp)
+                    ctx.lineTo(720 - 3 * temp, 140);
+                    ctx.strokeStyle = "black"
+                    ctx.stroke();
+                    initialize();
+                } else {
+                    lines();
+                }
             }
+        }
+
+
+        function lines() {
+            let acids = [];
+            rects.pop();
+            rects.pop();
+            resetCanvas();
+            rects.pop();
+            while (rects.length != 0) {
+                let temp = rects.pop();
+                temp.height = 30;
+                if (temp.location == 'top') {
+                    temp.y = 140;
+                } else {
+                    temp.y = 200
+                }
+                acids.push(temp);
+            }
+            while (acids.length != 0) {
+                let te = acids.pop();
+                rects.push(te);
+            }
+            
+            resetCanvas();
+
         }
 
         function drawPane() {
@@ -362,9 +486,11 @@
         }
 
         function resetCanvas() {
+          
+
+            var canvas = document.getElementById("drawingpane");
             canvas.width = canvas.clientWidth;
             canvas.height = canvas.clientHeight;
-
             ctx = canvas.getContext('2d');
             drawPane();
 
