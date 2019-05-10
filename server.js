@@ -1,4 +1,5 @@
-var app = require('express')();
+const express = require('express');
+var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var path = require('path');
@@ -6,6 +7,8 @@ var bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
 const databaseFile = './accounts.db';
 const db = new sqlite3.Database(databaseFile)
+
+app.set('/static', express.static(__dirname + '/static'));
 
 var urlencodedParser = bodyParser.urlencoded({
   extended: false
