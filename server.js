@@ -8,7 +8,7 @@ const sqlite3 = require('sqlite3').verbose();
 const databaseFile = './accounts.db';
 const db = new sqlite3.Database(databaseFile)
 
-app.set('/static', express.static(__dirname + '/static'));
+app.use('/static', express.static(__dirname + '/static'));
 
 var urlencodedParser = bodyParser.urlencoded({
   extended: false
