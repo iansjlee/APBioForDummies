@@ -236,12 +236,12 @@
             document.getElementById("def15").style.backgroundColor = "black";
         }
 
-        var tag = document.createElement('script');
+        let tag = document.createElement('script');
         tag.src = "http://www.youtube.com/player_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
+        let firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-        var player;
+        let player;
 
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('player', {
@@ -258,8 +258,6 @@
             document.getElementById('container').style.border = "2px solid black";
             document.getElementById('container').style.display = 'block';
             player.playVideo();
-
-
         }
 
         function closeanimation() {
@@ -268,7 +266,8 @@
 
         }
 
-        canvas = document.getElementById('drawingpane');
+        let canvas = document.getElementById('drawingpane');
+        let ctx = canvas.getContext('2D');
 
         let rects = [];
         let SineCurve = {
@@ -298,6 +297,7 @@
             height: 40,
             color: "red",
             text: "",
+            name: "",
             location: null,
             graphic: null,
 
@@ -309,6 +309,22 @@
                 ctx.fillRect(this.x, this.y, this.width, this.height);
             }
         }
+        let line = {
+            name: 'line',
+            x: 720,
+            y: 145,
+            end: 0,
+            goal: 145,
+            graphic: null,
+            render: function (ctx) {
+                ctx.beginPath();
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = "black";
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(this.end, this.goal);
+                ctx.stroke()
+            }
+        }
 
         function initialize() {
             SineCurve.graphic = document.getElementById('DStrand')
@@ -318,8 +334,9 @@
         function lick() {
             document.getElementById('startanimation').style.display = 'none';
             document.getElementById('pause').style.display = 'block';
-            
+
             drawing = Object.assign({}, SineCurve);
+            rects.push(drawing);
             for (j = 0; j < 6; j++) {
                 for (i = 0; i < 3; i++) {
                     DNA = Object.assign({}, Base);
@@ -390,10 +407,8 @@
                 }
             }
 
-
-            rects.push(drawing);
             initialize();
-            setTimeout(unwind(), 2000);
+            setTimeout(unwind, 1000);
         }
         let go = true;
 
@@ -408,7 +423,12 @@
             document.getElementById('resume').style.display = 'none';
             document.getElementById('pause').style.display = 'block';
             go = true;
-            window.requestAnimationFrame(unwind);
+            if (temp < 244) {
+                window.requestAnimationFrame(unwind);
+            } else if (time < 400) {
+                window.requestAnimationFrame(helicase);
+            }
+
         }
         let temp = 0;
 
@@ -421,6 +441,14 @@
                         rects.pop();
                         rects.pop();
                     }
+                    Background = Object.assign({}, Base);
+                    Background.color = 'white';
+                    Background.x = 720 - 3 * temp;
+                    Background.y = 120;
+                    Background.width = 100;
+                    Background.height = 120;
+                    Background.name = 'whiteB';
+                    rects.splice(1, 0, Background);
 
                     Border = Object.assign({}, Base);
                     Border.x = 720 - 3 * temp;
@@ -435,15 +463,39 @@
                     Topoisemerase.width = Border.width - 10;
                     Topoisemerase.y = Border.y + 5;
 
+                    let move = [];
+                    while (rects.length != 1) {
+                        let remove = rects.pop();
+                        if (remove.x > (Topoisemerase.x + Topoisemerase.width)) {
+
+                            if (remove.location == 'top') {
+                                remove.y = 145;
+                                remove.height = 25;
+
+                            } else if (remove.location == 'bottom') {
+                                remove.y = 219 - remove.height
+                                remove.height = 25;
+
+                            }
+                        }
+                        move.push(remove);
+                    }
+                    while (move.length != 0) {
+                        let t = move.pop();
+                        rects.push(t);
+                    }
+                    let line1 = Object.assign({}, line);
+                    line1.end = 720 - 3 * temp;
+
+                    let line2 = Object.assign({}, line);
+                    line2.y = 219;
+                    line2.goal = 219;
+                    line2.end = 720 - 3 * temp;
+
+                    rects.push(line2);
+                    rects.push(line1);
                     rects.push(Border);
                     rects.push(Topoisemerase);
-                    
-                    ctx.beginPath();
-                    ctx.moveTo(720, 140);
-                    console.log(temp)
-                    ctx.lineTo(720 - 3 * temp, 140);
-                    ctx.strokeStyle = "black"
-                    ctx.stroke();
                     initialize();
                 } else {
                     lines();
@@ -456,46 +508,185 @@
             let acids = [];
             rects.pop();
             rects.pop();
-            resetCanvas();
-            rects.pop();
+            rects.shift();
+
             while (rects.length != 0) {
                 let temp = rects.pop();
-                temp.height = 30;
-                if (temp.location == 'top') {
-                    temp.y = 140;
-                } else {
-                    temp.y = 200
+                if (temp.name != 'whiteB') {
+                    if (temp.name != 'line') {
+                        temp.height = 25;
+                        if (temp.location == 'top') {
+                            temp.y = 145;
+                        } else {
+                            temp.y = 195
+                        }
+                    }
+                    acids.push(temp);
                 }
-                acids.push(temp);
             }
+
             while (acids.length != 0) {
                 let te = acids.pop();
                 rects.push(te);
             }
-            
-            resetCanvas();
 
+            resetCanvas();
+            setTimeout(helicase, 1000);
+        }
+        let time = 0;
+
+        function helicase() {
+            if (go == true) {
+                if (time < 400) {
+                    time = time + 1;
+                    window.requestAnimationFrame(helicase);
+
+                    if (time > 1) {
+                        rects.pop();
+                        rects.pop();
+                    }
+
+                    HBorder = Object.assign({}, Base);
+                    HBorder.x = 740 - 2 * time;
+                    HBorder.y = 130;
+                    HBorder.height = 100;
+                    HBorder.width = 70;
+                    HBorder.color = 'Brown';
+                    Helicase = Object.assign({}, Base);
+                    HBorder.text = "Helicase";
+                    Helicase.x = HBorder.x + 5;
+                    Helicase.color = 'grey';
+                    Helicase.height = HBorder.height - 10;
+                    Helicase.width = HBorder.width - 10;
+                    Helicase.y = HBorder.y + 5;
+
+                    Back = Object.assign({}, Base);
+                    Back.color = 'white';
+                    Back.x = Helicase.x;
+                    Back.y = Helicase.y + 5;
+                    Back.width = Helicase.width;
+                    Back.height = Helicase.height;
+                    rects.splice(rects.length, 0, Back);
+
+                    rects.push(HBorder);
+                    rects.push(Helicase);
+
+                    let unzip = [];
+                    let tline1 = Object.assign({}, line);
+                    let tline2 = Object.assign({}, line);
+
+                    while (rects.length != 1) {
+                        let rem = rects.pop();
+                        if (rem.x > (Helicase.x + Helicase.width)) {
+
+                            if (rem.location == 'top') {
+                                rem.y = 105;
+                                rem.height = 25;
+
+                            } else if (rem.location == 'bottom') {
+                                rem.y = 259 - rem.height
+                                rem.height = 25;
+
+                            }
+                            if (rem.name == 'line' && rem.end > (Helicase.x + Helicase.width)) {
+
+                                if (rem.y > 150) {
+                                    rem.y = 105;
+                                    rem.goal = 105;
+                                    tline1.x = Helicase.x;
+                                    tline1.y = Helicase.y;
+                                    tline1.end = Helicase.x + Helicase.width;
+                                    tline1.goal = rem.y;
+                                } else {
+                                    rem.y = 259;
+                                    rem.goal = 259;
+                                    tline2.x = Helicase.x;
+                                    tline2.y = Helicase.y + Helicase.height;
+                                    tline2.end = Helicase.x + Helicase.width;
+                                    tline2.goal = rem.y
+                                }
+                            }
+                        }
+                        unzip.push(rem);
+                    }
+                    while (unzip.length != 0) {
+                        let a = unzip.pop();
+                        rects.push(a);
+
+                    }
+                    if (time > 1) {
+                        rects.shift();
+                        rects.shift();
+                    }
+                    rects.splice(0, 0, tline2);
+                    rects.splice(0, 0, tline1);
+
+                    resetCanvas();
+                } else {
+                    primase();
+                }
+            }
         }
 
-        function drawPane() {
-            for (let i = 0; i < rects.length; i++) {
-                rects[i].render(ctx)
+        function primase() {
+            rects.pop();
+            rects.pop();
+            rects.shift();
+            rects.shift();
+            resetCanvas();
+            setTimeout(RNAprimer, 1000)
+        }
+
+        let shift = 0;
+
+        function RNAprimer() {
+            if (go == true) {
+                if (shift < 80) {
+                    shift = shift + 1;
+                    window.requestAnimationFrame(RNAprimer);
+
+                    if (shift > 1) {
+                        rects.pop();
+                        rects.pop();
+                    }
+                    let primase = Object.assign({}, Base);
+                    primase.x = 790 - 2 *shift;
+                    primase.y = 40 + 0.7*shift;
+                    primase.width = 70;
+                    primase.height = 60;
+                    primase.color = 'rgba(144, 23, 214, 0.36)';
+                    primase.text = 'RNA Primase';
+
+                    let primasebox = Object.assign({}, Base);
+                    primasebox.x = primase.x + 5;
+                    primasebox.y = primase.y + 5;
+                    primasebox.width = primase.width - 10;
+                    primasebox.height = primase.height - 10;
+                    primasebox.color = 'rgba(23, 214, 207, 0.2)';
+
+                    rects.push(primase);
+                    rects.push(primasebox)
+                    console.log(rects)
+                    resetCanvas();
+                }
+            }
+        }
+            function drawPane() {
+                for (let i = 0; i < rects.length; i++) {
+                    rects[i].render(ctx)
+                }
+
             }
 
-        }
+            function resetCanvas() {
+                canvas.width = canvas.clientWidth;
+                canvas.height = canvas.clientHeight;
+                ctx = canvas.getContext('2d');
+                drawPane();
 
-        function resetCanvas() {
-          
-
-            var canvas = document.getElementById("drawingpane");
-            canvas.width = canvas.clientWidth;
-            canvas.height = canvas.clientHeight;
-            ctx = canvas.getContext('2d');
-            drawPane();
-
-        }
-        window.onload = resetCanvas;
-        window.onresize = resetCanvas;
+            }
+            window.onload = resetCanvas;
+            window.onresize = resetCanvas;
     </script>
 </body>
 
