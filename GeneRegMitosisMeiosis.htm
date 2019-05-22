@@ -269,7 +269,132 @@
         let canvas = document.getElementById('drawingpane');
         let ctx = canvas.getContext('2D');
 
-        let rects = [];
+        class LList {
+            constructor() {
+                this.head = null;
+            }
+            add(drawing) { //method for adding nodes (which contain drawings)
+                let addMe = new node();
+                let curr = this.head;
+                addMe.data = drawing;
+                if (this.head == null) {
+                    this.head = addMe;
+                } else {
+                    while (curr.next !== null) {
+                        curr = curr.next
+                    }
+                    curr.next = addMe;
+                }
+            }
+            remove() { //method for removing single nodes using the delete key
+                if (this.head !== null) {
+                    let curr = this.head;
+                    let curr2 = curr.next;
+                    if (curr.next !== null) {
+                        while (curr2.next != null) {
+                            curr = curr.next;
+                            curr2 = curr.next;
+                        }
+                        let temp = curr.next.data;
+                        curr.next = null;
+                        return temp;
+                    }
+                    this.head = null;
+                }
+            }
+            // insert element at the position index 
+            // of the list 
+            insertAt(element, index) {
+                if (index > 0 && index > this.size)
+                    return false;
+                else {
+                    // creates a new node 
+                    let add = new node();
+                    add.data = element;
+                    let curr, prev;
+
+                    curr = this.head;
+
+                    // add the element to the 
+                    // first index 
+                    if (index == 0) {
+                        add.next = head;
+                        this.head = add;
+                    } else {
+                        curr = this.head;
+                        let it = 0;
+
+                        // iterate over the list to find 
+                        // the position to insert 
+                        while (it < index) {
+                            it++;
+                            prev = curr;
+                            curr = curr.next;
+                        }
+
+                        // adding an element 
+                        add.next = curr;
+                        prev.next = node;
+                    }
+                    this.size++;
+                }
+            }
+            size() { //returns size of linked list
+                let s = 0;
+                let curr = this.head;
+                while (curr !== null) {
+                    curr = curr.next;
+                    s++;
+                }
+                return s;
+            }
+            get(index) { //returns data of a certain node
+                if (index < 0 || index >= this.size()) {
+                    throw "Index is not within boundaries"
+                }
+                let curr = this.head;
+                for (let i = 0; i < index; i++) {
+                    curr = curr.next;
+                }
+                return curr.data;
+            }
+            removeMiddle(j) { //method for moving drawing to front onclick
+                if (j == 0) {
+                    let curr = this.head;
+                    let curr2 = this.head;
+                    this.head = curr.next;
+                    while (curr.next !== null) {
+                        curr = curr.next;
+                    }
+                    curr.next = curr2;
+                    curr2.next = null;
+                } else {
+                    let curr = this.head;
+                    let index = 1;
+                    while (index !== j) {
+                        curr = curr.next;
+                        index++;
+                    }
+                    let curr2 = curr.next;
+                    curr.next = curr2.next;
+                    while (curr.next !== null) {
+                        curr = curr.next;
+                    }
+                    curr.next = curr2;
+                    curr2.next = null;
+                    return curr.next;
+                }
+            }
+        };
+        class node {
+            constructor() {
+                this.data = null;
+                this.next = null;
+            }
+        };
+
+        let rects = new LList(); //creates linked list
+
         let SineCurve = {
             x: null,
             y: null,
@@ -300,7 +425,7 @@
             name: "",
             location: null,
             graphic: null,
-
+            group: null,
             render: function (ctx) {
                 ctx.fillStyle = this.color;
                 canvas.text = "bold 14px verdana, sans-serif";
@@ -325,6 +450,21 @@
                 ctx.stroke()
             }
         }
+        let Triangle = {
+            x: 0,
+            y: 0,
+            width: 0,
+            height: 0,
+            color: 'rgba(0,0,0,1)',
+            render: function (ctx) {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.moveTo(this.x + (1 / 2) * (this.width), this.y);
+                ctx.lineTo(this.x, this.y + this.height);
+                ctx.lineTo(this.x + this.width, this.y + this.height);
+                ctx.fill();
+            }
+        };
 
         function initialize() {
             SineCurve.graphic = document.getElementById('DStrand')
@@ -336,13 +476,16 @@
             document.getElementById('pause').style.display = 'block';
 
             drawing = Object.assign({}, SineCurve);
-            rects.push(drawing);
+            //  rects.push(drawing);
+            rects.add(drawing);
+            console.log(rects)
             for (j = 0; j < 6; j++) {
                 for (i = 0; i < 3; i++) {
                     DNA = Object.assign({}, Base);
                     DNA.x = DNA.x + (12 * i) + 120 * j;
                     DNA.y = DNA.y - (5 * i);
                     DNA.height = .5 * (DNA.height + (11 * i) + (i ^ 3) * 2);
+                    DNA.group = j;
                     if (Math.random() > 0.75) {
                         DNA.color = 'blue';
                     } else if (Math.random() > 0.5) {
@@ -351,12 +494,15 @@
                         DNA.color = 'green';
                     }
                     DNA.location = 'top';
-                    rects.push(DNA);
+                    //  rects.push(DNA);
+                    rects.add(DNA);
+
 
                     DNA2 = Object.assign({}, Base);
                     DNA2.x = DNA2.x + (12 * i) + 120 * j;
                     DNA2.y = DNA.y + DNA.height;
                     DNA2.height = .5 * (DNA2.height + (11 * i) + (i ^ 3) * 2);
+                    DNA2.group = j;
                     if (DNA.color == 'red') {
                         DNA2.color = 'green';
                     } else if (DNA.color == 'green') {
@@ -367,7 +513,9 @@
                         DNA2.color = 'yellow'
                     }
                     DNA2.location = 'bottom';
-                    rects.push(DNA2);
+                    //  rects.push(DNA2);
+                    rects.add(DNA2);
+
                 }
             }
 
@@ -378,6 +526,7 @@
                     DNA.x = DNA.x - (12 * i) + 120 * j;
                     DNA.y = DNA.y - (5 * i);
                     DNA.height = .5 * (DNA.height + (12 * i) + (i ^ 3) * 2 + 3);
+                    DNA.group = j;
                     if (Math.random() > 0.75) {
                         DNA.color = 'blue';
                     } else if (Math.random() > 0.5) {
@@ -386,13 +535,17 @@
                         DNA.color = 'green';
                     }
                     DNA.location = 'top';
-                    rects.push(DNA);
+                    //  rects.push(DNA);
+                    rects.add(DNA);
+
 
                     DNA2 = Object.assign({}, Base);
                     DNA2.x = DNA2.x + 60;
                     DNA2.x = DNA2.x - (12 * i) + 120 * j;
                     DNA2.y = DNA.y + DNA.height;
                     DNA2.height = .5 * (DNA2.height + (12 * i) + (i ^ 3) * 2 + 3);
+                    DNA2.group = j;
+
                     if (DNA.color == 'red') {
                         DNA2.color = 'green';
                     } else if (DNA.color == 'green') {
@@ -403,12 +556,14 @@
                         DNA2.color = 'yellow'
                     }
                     DNA2.location = 'bottom';
-                    rects.push(DNA2);
+                    // rects.push(DNA2);
+                    rects.add(DNA2);
+
                 }
             }
 
             initialize();
-            setTimeout(unwind, 1000);
+            setTimeout(unwind, 1);
         }
         let go = true;
 
@@ -427,6 +582,10 @@
                 window.requestAnimationFrame(unwind);
             } else if (time < 400) {
                 window.requestAnimationFrame(helicase);
+            } else if (shift < 80) {
+                window.requestAnimationFrame(RNAprimer);
+            } else if (z < 800) {
+                window.requestAnimationFrame(rna);
             }
 
         }
@@ -438,8 +597,9 @@
                     temp = temp + 1;
                     window.requestAnimationFrame(unwind);
                     if (temp > 1) {
-                        rects.pop();
-                        rects.pop();
+                        //  rects.pop();
+                        //rects.pop();
+                        rects.remove();
                     }
                     Background = Object.assign({}, Base);
                     Background.color = 'white';
@@ -448,7 +608,8 @@
                     Background.width = 100;
                     Background.height = 120;
                     Background.name = 'whiteB';
-                    rects.splice(1, 0, Background);
+                  //  rects.splice(1, 0, Background);
+                    rects.insertAt(Background,1)
 
                     Border = Object.assign({}, Base);
                     Border.x = 720 - 3 * temp;
@@ -465,24 +626,30 @@
 
                     let move = [];
                     while (rects.length != 1) {
-                        let remove = rects.pop();
+                        //     let remove = rects.pop();
+                        let remove = rects.remove();
+                        console.log(remove)
                         if (remove.x > (Topoisemerase.x + Topoisemerase.width)) {
 
                             if (remove.location == 'top') {
                                 remove.y = 145;
                                 remove.height = 25;
-
+                                //         remove.x = remove.x - remove.group * 10;
+                                //       console.log(remove.x);  
                             } else if (remove.location == 'bottom') {
                                 remove.y = 219 - remove.height
                                 remove.height = 25;
+                                //         remove.x = remove.x - remove.group * 10;
 
                             }
                         }
                         move.push(remove);
+
                     }
                     while (move.length != 0) {
                         let t = move.pop();
-                        rects.push(t);
+                        //       rects.push(t);
+                        rects.add(t)
                     }
                     let line1 = Object.assign({}, line);
                     line1.end = 720 - 3 * temp;
@@ -492,10 +659,15 @@
                     line2.goal = 219;
                     line2.end = 720 - 3 * temp;
 
-                    rects.push(line2);
-                    rects.push(line1);
-                    rects.push(Border);
-                    rects.push(Topoisemerase);
+                    //    rects.push(line2);
+                    //  rects.push(line1);
+                    // rects.push(Border);
+                    //rects.push(Topoisemerase);
+
+                    rects.add(line2);
+                    rects.add(line1);
+                    rects.add(Border);
+                    rects.add(Topoisemerase);
                     initialize();
                 } else {
                     lines();
@@ -506,12 +678,19 @@
 
         function lines() {
             let acids = [];
-            rects.pop();
-            rects.pop();
-            rects.shift();
+            //  rects.pop();
+            //rects.pop();
+
+            rects.remove();
+            rects.remove();
+
+            //rects.shift();
+            rects.removeMiddle(0);
 
             while (rects.length != 0) {
-                let temp = rects.pop();
+                //      let temp = rects.pop();
+                let temp = rects.remove();
+
                 if (temp.name != 'whiteB') {
                     if (temp.name != 'line') {
                         temp.height = 25;
@@ -527,11 +706,12 @@
 
             while (acids.length != 0) {
                 let te = acids.pop();
-                rects.push(te);
+                //  rects.push(te);
+                rects.add(te);
             }
 
             resetCanvas();
-            setTimeout(helicase, 1000);
+            setTimeout(helicase, 1);
         }
         let time = 0;
 
@@ -542,8 +722,11 @@
                     window.requestAnimationFrame(helicase);
 
                     if (time > 1) {
-                        rects.pop();
-                        rects.pop();
+                        // rects.pop();
+                        //rects.pop();
+                        rects.remove();
+                        rects.remove();
+
                     }
 
                     HBorder = Object.assign({}, Base);
@@ -566,17 +749,24 @@
                     Back.y = Helicase.y + 5;
                     Back.width = Helicase.width;
                     Back.height = Helicase.height;
-                    rects.splice(rects.length, 0, Back);
+                 //   rects.splice(rects.length, 0, Back);
+                    rects.add(Back);
+                    
 
-                    rects.push(HBorder);
-                    rects.push(Helicase);
+                    //  rects.push(HBorder);
+                    //rects.push(Helicase);
+
+                    rects.add(HBorder);
+                    rects.add(Helicase);
 
                     let unzip = [];
                     let tline1 = Object.assign({}, line);
                     let tline2 = Object.assign({}, line);
 
                     while (rects.length != 1) {
-                        let rem = rects.pop();
+                        //  let rem = rects.pop();
+                        let rem = rects.remove();
+
                         if (rem.x > (Helicase.x + Helicase.width)) {
 
                             if (rem.location == 'top') {
@@ -611,15 +801,22 @@
                     }
                     while (unzip.length != 0) {
                         let a = unzip.pop();
-                        rects.push(a);
+                        //   rects.push(a);
+                        rects.add(a);
 
                     }
                     if (time > 1) {
-                        rects.shift();
-                        rects.shift();
+                        //  rects.shift();
+                        //rects.shift();
+
+                        rects.getMiddle(0);
+                        rects.getMiddle(0);
+
                     }
-                    rects.splice(0, 0, tline2);
-                    rects.splice(0, 0, tline1);
+                   // rects.splice(0, 0, tline2);
+                    rects.insertAt(tline1, 0);
+                  //  rects.splice(0, 0, tline1);
+                  rects.insertAt(tline2, 0);
 
                     resetCanvas();
                 } else {
@@ -629,10 +826,18 @@
         }
 
         function primase() {
-            rects.pop();
-            rects.pop();
-            rects.shift();
-            rects.shift();
+            //   rects.pop();
+            // rects.pop();
+
+            rects.remove();
+            rects.remove();
+
+            //  rects.shift();
+            //rects.shift();
+
+            rects.getMiddle(0);
+            rects.getMiddle(0);
+
             resetCanvas();
             setTimeout(RNAprimer, 1000)
         }
@@ -646,12 +851,16 @@
                     window.requestAnimationFrame(RNAprimer);
 
                     if (shift > 1) {
-                        rects.pop();
-                        rects.pop();
+                        //    rects.pop();
+                        //  rects.pop();
+
+                        rects.remove();
+                        rects.remove();
+
                     }
                     let primase = Object.assign({}, Base);
-                    primase.x = 790 - 2 *shift;
-                    primase.y = 40 + 0.7*shift;
+                    primase.x = 790 - 2 * shift;
+                    primase.y = 40 + 0.7 * shift;
                     primase.width = 70;
                     primase.height = 60;
                     primase.color = 'rgba(144, 23, 214, 0.36)';
@@ -664,29 +873,173 @@
                     primasebox.height = primase.height - 10;
                     primasebox.color = 'rgba(23, 214, 207, 0.2)';
 
-                    rects.push(primase);
-                    rects.push(primasebox)
-                    console.log(rects)
+                    //    rects.push(primase);
+                    //   rects.push(primasebox)
+
+                    rects.add(primase);
+                    rects.add(primasebox);
                     resetCanvas();
+                } else {
+                    rna();
                 }
             }
         }
-            function drawPane() {
-                for (let i = 0; i < rects.length; i++) {
-                    rects[i].render(ctx)
+
+        let z = 0;
+
+        function rna() {
+            if (go == true) {
+                if (z < 200) {
+                    if (z > 0) {
+                        //     rects.pop();
+                        //   rects.pop();
+                        // rects.pop();
+                        //rects.pop();
+
+                        rects.remove();
+                        rects.remove();
+                        rects.remove();
+                        rects.remove();
+
+                    }
+                    z = z + 1;
+                    window.requestAnimationFrame(rna);
+                    let rna1 = Object.assign({}, Base);
+                    let rna1Border = Object.assign({}, Base);
+                    let rna2 = Object.assign({}, Base);
+                    let rna2Border = Object.assign({}, Base);
+
+                    rna1Border.width = 5;
+                    rna1Border.height = 25;
+                    rna1Border.x = 985 - 1.5 * z;
+
+                    rna1Border.y = 10 + 0.6 * z;
+                    rna1Border.color = 'black';
+
+                    rna1.width = 3;
+                    rna1.height = 21;
+                    rna1.x = rna1Border.x + 1;
+                    rna1.y = rna1Border.y + 2;
+
+                    if (rects[66].color == 'red') {
+                        rna1.color = 'green';
+                    } else if (rects[66].color == 'green') {
+                        rna1.color = 'red';
+                    } else if (rects[66].color == 'blue') {
+                        rna1.color = 'yellow';
+                    } else {
+                        rna1.color = 'blue';
+                    }
+                    if (rects[68].color == 'red') {
+                        rna2.color = 'green';
+                    } else if (rects[68].color == 'green') {
+                        rna2.color = 'red';
+                    } else if (rects[68].color == 'blue') {
+                        rna2.color = 'yellow';
+                    } else {
+                        rna2.color = 'blue';
+                    }
+
+
+                    rna2Border.width = 5;
+                    rna2Border.height = 25;
+                    rna2Border.x = 973 - 1.5 * z;
+                    rna2Border.y = 10 + 0.6 * z;
+
+                    rna2Border.color = 'black'
+
+                    rna2.width = 3;
+                    rna2.height = 21;
+                    rna2.x = rna2Border.x + 1;
+                    rna2.y = rna2Border.y + 2;
+
+                    //    rects.push(rna1Border);
+                    // rects.push(rna2Border);
+                    // rects.push(rna1);
+                    // rects.push(rna2);
+
+                    rects.add(rna1Border);
+                    rects.add(rna2Border);
+                    rects.add(rna1);
+                    rects.add(rna2);
+
+                    resetCanvas();
+                } else {
+                    //  let Btemp = rects.splice(960, 2);
+                    let Btemp = rects.removeMiddle(960);
+                    let Btemp1 = rects.removeMiddle(960);
+                    //    rects.push(Btemp[0]);
+                    //  rects.push(Btemp[1]);
+
+                    rects.add(Btemp);
+                    rects.add(Btemp1);
+                    resetCanvas();
+                    removeprimase();
                 }
+            }
+        }
+        let tttimer = 0;
 
+        function removeprimase() {
+            if (go == true) {
+                if (tttimer < 120) {
+
+                    //     if (y > 0) {
+                    //     let bigb = rects.pop();
+                    //   let smallb = rects.pop();
+
+                    let bigb = rects.remove();
+                    let smallb = rects.remove();
+
+                    //   }
+                    tttimer = tttimer + 1;
+                    window.requestAnimationFrame(removeprimase);
+
+
+
+                    bigb.x = 630 + 5 * tttimer;
+                    smallb.x = 635 + 5 * tttimer;
+
+                    //     rects.push(bigb);
+                    //   rects.push(smallb);
+
+                    rects.add(bigb);
+                    rects.add(smallb);
+                    resetCanvas();
+                } else {
+                    //rects.pop();
+                    //rects.pop();
+
+                    rects.remove();
+                    rects.remove();
+
+                    resetCanvas();
+                    DNAPolymerase();
+                }
             }
 
-            function resetCanvas() {
-                canvas.width = canvas.clientWidth;
-                canvas.height = canvas.clientHeight;
-                ctx = canvas.getContext('2d');
-                drawPane();
+        }
 
+        function DNAPolymerase() {
+
+        }
+
+        function drawPane() {
+            for (let i = 0; i < rects.size; i++) {
+                rects.get(i).render(ctx)
             }
-            window.onload = resetCanvas;
-            window.onresize = resetCanvas;
+
+        }
+
+        function resetCanvas() {
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
+            ctx = canvas.getContext('2d');
+            drawPane();
+
+        }
+        window.onload = resetCanvas;
+        window.onresize = resetCanvas;
     </script>
 </body>
 
