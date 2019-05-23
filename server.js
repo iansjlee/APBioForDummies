@@ -92,6 +92,10 @@ app.get('/eco', function (req, res) {
   res.sendFile(path.join(__dirname + '/Ecology.htm'));
 });
 
+app.get('/game', function(req, res) {
+    res.sendFile(path.join(_dirname + '/designproject2.0.htm'));
+})
+
 
 
 function initDB( db ){
