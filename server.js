@@ -93,8 +93,9 @@ app.get('/eco', function (req, res) {
 });
 
 app.get('/game', function(req, res) {
-    res.sendFile(path.join(_dirname + '/designproject2.0.htm'));
+    res.sendFile(path.join(__dirname + '/designproject2.0.htm'));
 })
+
 
 
 
@@ -102,7 +103,7 @@ function initDB( db ){
 db.serialize(function() {
 db.run('CREATE TABLE IF NOT EXISTS accounts(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username VARCHAR(256), password VARCHAR(256))');
 });
-}
+} //creates a table if it doesn't exist
 
 function getRecords( db, username ){
  console.log('ENTER getRecords');
@@ -124,7 +125,7 @@ function getRecords( db, username ){
  })
 
  return prom;
-}
+} //promise function
 
 function Login( db, username, password ){
  console.log('ENTER getRecords');
@@ -146,7 +147,7 @@ function Login( db, username, password ){
  })
 
  return lprom;
-}
+} //promise function
 
 initDB(db);
 

@@ -1,0 +1,714 @@
+<html>
+
+<head>
+  <style>
+    div#P1{
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background-color:black;
+  margin: 1px;
+  top: 50%;
+  left: 40%;
+  border-style: solid;
+  border-color: white;
+
+}
+
+div#P2{
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background-color: black;
+  top: 50%;
+  left: 60%;
+  margin: 1px;
+  border-style: solid;
+  border-color: white;
+
+}
+
+body{
+  margin: 0;
+  background-color: black;
+}
+
+div.zombie{
+  position: absolute;
+  background-color: #666633;
+  border-style: solid;
+  border-color: green;
+  height: 30px;
+  width: 30px;
+  top: 500px;
+  left: 500px;
+
+}
+
+div.healthBar{
+  height: 10px;
+  width: 48px;
+  background-color: green;
+  position: relative;
+  z-index: 10;
+}
+
+div.health{
+  height: 10px;
+  width: 1px;
+  background-color: black;
+  position: relative;
+  z-index: 10;
+}
+
+div.bullet{
+  top: 10px;
+  width:8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #ff0000;
+  position: absolute;
+  z-index: -1;
+}
+
+div.scoreboard{
+  z-index: 20;
+  width: 10%;
+  height: 7%;
+  background-color: lightgrey;
+  border-style: solid;
+  border-width:3px;
+  margin-top: 1px;
+  margin-left: 1px;
+  border-color: white;
+}
+
+
+
+div#scoreboardTotal{
+  left: 45%;
+  height: 4ex;
+  position: absolute;
+  text-align: center;
+  font-size: 5ex;
+  padding-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+  <div id="scoreboardTotal" , class="scoreboard">
+    <!-- This creates the scoreboard div  -->
+  </div>
+
+  <div id="P1">
+    <!-- This creates our first player -->
+
+    <div id="healthBar1" , class="healthBar">
+      <!-- This creaetes P1 healthbar -->
+
+    </div>
+  </div>
+
+  <div id="P2">
+    <div id="healthBar2" , class="healthBar">
+      <!-- This creates P2 healthbar -->
+
+    </div>
+  </div>
+
+
+  <script>
+    let audio = new Audio('music.mp3');
+    audio.loop = true;
+    audio.play();
+
+    let timeSet = 1000
+    // how frequently the zombies spawn
+    let shots = 0
+    //how many shots taken
+    let totalScore = 0
+
+    let scoreRed = 0
+    //red player score
+    let scoreBlue = 0
+    //blue player score
+    let scoreTotal = 0
+
+    let zombies = []
+    // array of all zombies
+    let keys = []
+
+    let anim = null
+
+    let animZ = null
+
+    let animL = null
+
+    let bullets1 = []
+
+    let bullets2 = []
+
+    let gamePaused = true
+
+    let p = 50
+
+    let q = 50
+
+    let a = b = 1
+
+    let P1 = {
+      x: 0,
+      y: 0,
+      velX: 0,
+      velY: 0,
+      graphic: null,
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+      directionX: 0,
+      directionY: 0,
+      isAlive: true,
+      hasMoved: false,
+      move: function() {
+        this.x = this.x + this.velX
+        this.y = this.y + this.velY
+        if (this.graphic !== null) {
+          this.left = this.x
+          this.top = this.y
+          this.right = this.x + this.graphic.clientWidth
+          this.bottom = this.y + this.graphic.clientHeight
+        }
+        if (this.x < 0) {
+          this.x = 0
+        }
+        if (this.y < 0) {
+          this.y = 0
+        }
+        if (this.y > window.innerHeight - this.graphic.clientHeight) {
+          this.y = window.innerHeight - this.graphic.clientHeight
+        }
+        if (this.x > window.innerWidth - this.graphic.clientWidth) {
+          this.x = window.innerWidth - this.graphic.clientWidth
+        }
+
+        if (this.velX != 0 || this.velY != 0) {
+          this.directionX = this.velX;
+          this.directionY = this.velY;
+        }
+
+
+      },
+      update: function() {
+        this.graphic.style.left = this.x + "px"
+        this.graphic.style.top = this.y + "px"
+      }
+    }
+
+    let scoreboardTotal = Object.assign({}, P1)
+
+    let healthBar1 = {
+      x: 0,
+      y: 0,
+      velX: 0,
+      velY: 0,
+      graphic: null,
+      move: function() {
+        this.x = P1.x + P1.velX
+        this.y = P1.y + P1.velY
+      },
+      update: function() {
+        this.graphic.style.left = this.x + "px"
+        this.graphic.style.top = this.y + "px"
+      }
+    }
+
+    let P2 = Object.assign({}, P1)
+
+    let healthBar2 = {
+      x: 0,
+      y: 0,
+      velX: 0,
+      velY: 0,
+      graphic: null,
+      move: function() {
+        this.x = P2.x + P2.velX
+        this.y = P2.y + P2.velY
+      },
+      update: function() {
+        this.graphic.style.left = this.x + "px"
+        this.graphic.style.top = this.y + "px"
+      }
+    }
+
+    let zombie = {
+      x: 0,
+      y: 0,
+      velX: 0,
+      velY: 0,
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+      graphic: null,
+      isChasing: 0,
+      move: function() {
+        this.x = this.x + this.velX
+        this.y = this.velY + this.y
+        if (this.graphic !== null) {
+          this.left = this.x
+          this.top = this.y
+          this.right = this.x + this.graphic.clientWidth
+          this.bottom = this.y + this.graphic.clientHeight
+        }
+      },
+      update: function() {
+        this.graphic.style.left = this.x + "px"
+        this.graphic.style.top = this.y + "px"
+      },
+
+      toHuman: function() {
+        // sends the zombies to the nearest alive player
+        if (P2.isAlive == true && P1.isAlive == false) {
+          isChasing = 2
+          let a = this.x - P2.x
+          let b = this.y - P2.y
+          let c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2))
+          let uva = a / c
+          let uvb = b / c
+          this.velX = uva * -1
+          this.velY = uvb * -1
+        }
+
+        if (P1.isAlive == true && P2.isAlive == false) {
+          isChasing = 1
+          let a = this.x - P1.x
+          let b = this.y - P1.y
+          let c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2))
+          let uva = a / c
+          let uvb = b / c
+          this.velX = uva * -1
+          this.velY = uvb * -1
+        }
+        if (P2.isAlive == true) {
+          if (Math.sqrt(Math.pow(Math.abs(this.x - P1.x), 2) + Math.pow(Math.abs(this.y - P1.y), 2)) > Math.sqrt(Math.pow(Math.abs(this.x - P2.x), 2) + Math.pow(Math.abs(this.y - P2.y), 2))) {
+            isChasing = 2
+            let a = this.x - P2.x
+            let b = this.y - P2.y
+            let c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2))
+            let uva = a / c
+            let uvb = b / c
+            this.velX = uva * -1
+            this.velY = uvb * -1
+          }
+        }
+
+        if (P1.isAlive == true) {
+          if (Math.sqrt(Math.pow(Math.abs(this.x - P1.x), 2) + Math.pow(Math.abs(this.y - P1.y), 2)) < Math.sqrt(Math.pow(Math.abs(this.x - P2.x), 2) + Math.pow(Math.abs(this.y - P2.y), 2))) {
+            isChasing = 1
+            let a = this.x - P1.x
+            let b = this.y - P1.y
+            let c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2))
+            let uva = a / c
+            let uvb = b / c
+            this.velX = uva * -1
+            this.velY = uvb * -1
+          }
+        }
+      }
+    }
+
+
+    function bullet1Spawn() {
+      //spawns a bullet when the shoot key is released
+      if (gamePaused == false && P1.isAlive == true && P1.hasMoved == true) {
+        let bul = Object.assign({}, P1)
+        shots++
+        bul.graphic = document.createElement('div');
+
+        bul.x = P1.x + P1.graphic.clientWidth / 2
+        bul.y = P1.y + P1.graphic.clientHeight / 2
+        if (P1.directionX > 0) {
+          bul.velX = P1.directionX * 10;
+        }
+        if (P1.directionY > 0) {
+          bul.velY = P1.directionY * 10;
+        }
+        if (P1.directionX < 0) {
+          bul.velX = P1.directionX * 10;
+        }
+        if (P1.directionY < 0) {
+          bul.velY = P1.directionY * 10;
+        }
+        document.body.appendChild(bul.graphic);
+        bul.graphic.classList.add('bullet');
+
+        bullets1.push(bul);
+      }
+    }
+
+    function bullet2Spawn() {
+      // a copy of bullet1spawn for P2
+      if (gamePaused == false && P2.isAlive == true && P2.hasMoved == true) {
+        let bul = Object.assign({}, P1)
+        shots++
+        bul.graphic = document.createElement('div');
+
+        bul.x = P2.x + P2.graphic.clientWidth / 2
+        bul.y = P2.y + P2.graphic.clientHeight / 2
+        if (P2.directionX > 0) {
+          bul.velX = P2.directionX * 10;
+        }
+        if (P2.directionY > 0) {
+          bul.velY = P2.directionY * 10;
+        }
+        if (P2.directionX < 0) {
+          bul.velX = P2.directionX * 10;
+        }
+        if (P2.directionY < 0) {
+          bul.velY = P2.directionY * 10;
+        }
+        document.body.appendChild(bul.graphic);
+        bul.graphic.classList.add('bullet');
+
+        bullets2.push(bul);
+      }
+    }
+
+    function keyPressed(ev) {
+      //fills the array of keys when said key is pressed
+      keys[ev.keyCode] = true
+      if (ev.keyCode == 192) {
+        location.reload()
+      }
+    }
+
+    function keyReleased(ev) {
+      // deletes the keycode from the array
+      delete keys[ev.keyCode]
+      if (ev.keyCode === 80) {
+        togglePause()
+      }
+      if (ev.keyCode === 191) {
+        bullet1Spawn()
+      }
+      if (ev.keyCode === 32) {
+        bullet2Spawn()
+      }
+    }
+
+    function KeysMove() {
+      P1.velX = P1.velY = P2.velX = P2.velY = 0
+      if (keys[39] === true) {
+        P1.velX = 5;
+        P1.hasMoved = true;
+      }
+      if (keys[37] === true) {
+        P1.velX = -5;
+        P1.hasMoved = true;
+      }
+      if (keys[40] === true) {
+        P1.velY = 5;
+        P1.hasMoved = true;
+      }
+      if (keys[38] === true) {
+        P1.velY = -5;
+        P1.hasMoved = true;
+      }
+      if (keys[87] === true) {
+        P2.velY = -5;
+        P2.hasMoved = true;
+      }
+      if (keys[83] === true) {
+        P2.velY = 5;
+        P2.hasMoved = true;
+      }
+      if (keys[65] === true) {
+        P2.velX = -5;
+        P2.hasMoved = true;
+      }
+      if (keys[68] === true) {
+        P2.velX = 5;
+        P2.hasMoved = true;
+      }
+    }
+
+
+    function zombieSpawn() {
+      let n = Math.random()
+      let m = 0.000000001
+      if (n >= m) {
+        let zom = Object.assign({}, zombie)
+        zom.graphic = document.createElement('div');
+        if (Math.random() <= 0.25) {
+          zom.x = window.innerWidth - 43.5;
+          zom.y = Math.random() * window.innerHeight;
+        }
+        if (Math.random() >= 0.25 && Math.random() <= 1) {
+          zom.x = Math.random() * window.innerWidth
+          zom.y = window.innerHeight - 43.5
+        }
+        if (Math.random() >= 0.50 && Math.random() <= 1) {
+          zom.x = Math.random() * window.innerWidth
+          zom.y = 0
+        }
+        if (Math.random() >= 0.75 && Math.random() <= 1) {
+          zom.x = 0
+          zom.y = Math.random() * window.innerHeight
+        }
+        document.body.appendChild(zom.graphic);
+        zom.graphic.classList.add('zombie');
+        zombies.push(zom);
+      }
+    }
+
+    function levelUp() {
+      timeSet = timeSet - 10
+    }
+
+    function togglePause() {
+      if (gamePaused == true) {
+        anim = setInterval(nextFrame, 25)
+        animZ = setInterval(zombieSpawn, timeSet)
+        animL = setInterval(levelUp, 2000)
+        gamePaused = false
+      } else {
+        alert("Game paused. Press enter then P to resume")
+        clearInterval(anim)
+        clearInterval(animZ)
+        anim = null
+        animZ = null
+        gamePaused = true
+      }
+    }
+
+    function collision(r1, r2) {
+      return !(r2.right < r1.left || r2.bottom < r1.top || r2.left > r1.right || r2.top > r1.bottom)
+    }
+
+
+    function deathCheck1() {
+
+      if (p <= 0) {
+        if (b === 1) {
+          b = 0
+          scoreBlue = scoreBlue - 10
+
+        }
+
+        P1.isAlive = false;
+        if (P1.graphic.parentNode != null) {
+          P1.graphic.parentNode.removeChild(P1.graphic);
+          deathCheck1.delete
+        }
+
+        setTimeout(function() {
+          P1.isAlive = true
+          document.body.appendChild(P1.graphic);
+          b = 1
+          p = 50
+        }, 8000);
+
+      }
+
+    }
+
+    function deathCheck2() {
+      if (q <= 0) {
+        if (a === 1) {
+          a = 0
+          scoreRed = scoreRed - 10
+
+        }
+
+        P2.isAlive = false
+        if (P2.graphic.parentNode !== null) {
+          P2.graphic.parentNode.removeChild(P2.graphic)
+          deathCheck2.delete
+        }
+        setTimeout(function() {
+          P2.isAlive = true
+          document.body.appendChild(P2.graphic);
+          a = 1
+          q = 50
+        }, 8000);
+      }
+
+    }
+
+    function nextFrame() {
+      if (p < 50 && p > 0) {
+        p = p + 0.01
+      }
+      if (q < 50 && q > 0) {
+        q = q + 0.01
+      }
+
+      KeysMove()
+      P1.move()
+      P2.move()
+
+      for (let i = 0; i < zombies.length; i++) {
+        zombies[i].toHuman();
+        zombies[i].move();
+      }
+      for (let i = 0; i < bullets1.length; i++) {
+        bullets1[i].move()
+
+      }
+      for (let i = 0; i < bullets2.length; i++) {
+        bullets2[i].move()
+
+      }
+
+      if (collision(P1, P2) === true && P1.isAlive && P2.isAlive) {
+        P1.x = P1.x - P1.velX
+        P1.y = P1.y - P1.velY
+        P2.y = P2.y - P2.velY
+        P2.x = P2.x - P2.velX
+      }
+
+
+      for (let i = 0; i < zombies.length; i++) {
+        let zom = zombies[i]
+
+        if (collision(P1, zom) === true && P1.isAlive) {
+          P1.x = P1.x - P1.velX * 0.1
+          P1.y = P1.y - P1.velY * 0.1
+          zom.x = zom.x - zom.velX * 5
+          zom.y = zom.y - zom.velY * 5
+          p = p - 2
+        }
+        if (collision(P2, zom) === true && P2.isAlive) {
+          P2.x = P2.x - P2.velX * 0.1
+          P2.y = P2.y - P2.velY * 0.1
+          zom.x = zom.x - zom.velX * 5
+          zom.y = zom.y - zom.velY * 5
+          q = q - 2
+
+        }
+
+      }
+
+      for (let i = 0; i < bullets1.length; i++) {
+        for (let j = 0; j < zombies.length; j++) {
+          let bul = bullets1[i]
+          let zom = zombies[j]
+          if (collision(bul, zom) == true) {
+
+            zombies[j].graphic.style.backgroundColor = "black"
+            zombies[j].graphic.style.border = "none"
+            zombies[j].graphic.style.zIndex = "-1"
+            zombies.splice(j, 1)
+            bullets1[i].graphic.style.backgroundColor = "black"
+            bullets1[i].graphic.style.border = "none"
+            bullets1.splice(i, 1)
+            scoreBlue++
+
+          }
+        }
+      }
+      for (let i = 0; i < zombies.length; i++) {
+        if (zombies[i].isChasing == 2 && P2.isAlive == false) {
+          zombies[i].graphic.style.backgroundColor = "black"
+          zombies[i].graphic.style.border = "none"
+          zombies[i].graphic.style.zIndex = "-1"
+          zombies.splice(i, 1)
+        }
+        if (zombies[i].isChasing == 1 && P1.isAlive == false) {
+          zombies[i].graphic.style.backgroundColor = "black"
+          zombies[i].graphic.style.border = "none"
+          zombies[i].graphic.style.zIndex = "-1"
+          zombies.splice(i, 1)
+        }
+      }
+
+      for (let i = 0; i < bullets2.length; i++) {
+        for (let j = 0; j < zombies.length; j++) {
+          let bul = bullets2[i]
+          let zom = zombies[j]
+          if (collision(bul, zom) == true) {
+            zombies[j].graphic.style.backgroundColor = "black"
+            zombies[j].graphic.style.border = "none"
+            zombies[j].graphic.style.zIndex = "-1"
+            zombies.splice(j, 1)
+            bullets2[i].graphic.style.backgroundColor = "black"
+            bullets2[i].graphic.style.border = "none"
+            bullets2.splice(i, 1)
+            scoreRed++
+
+          }
+        }
+      }
+
+      P1.update()
+      P2.update()
+
+      for (let i = 0; i < zombies.length; i++) {
+        zombies[i].update();
+      }
+      for (let i = 0; i < bullets1.length; i++) {
+        bullets1[i].update()
+
+      }
+      for (let i = 0; i < bullets2.length; i++) {
+        bullets2[i].update()
+
+      }
+
+      scoreTotal = scoreRed + scoreBlue
+      scoreboardTotal.graphic.appendChild(totalScore)
+      scoreboardTotal.graphic.removeChild(totalScore)
+      totalScore = document.createTextNode(scoreTotal)
+      scoreboardTotal.graphic.appendChild(totalScore)
+
+      healthBar1.graphic.style.width = (p * 1)
+      healthBar2.graphic.style.width = (q * 1)
+
+
+      deathCheck1()
+      deathCheck2()
+      let bulTotal = bullets1.length + bullets2.length
+      let accuracy = (100 * (shots - bulTotal)) / shots
+      accuracy = parseInt(accuracy)
+      if (P2.isAlive === false && P1.isAlive === false || p <= 0 && q <= 0) {
+        if (isNaN(accuracy)) {
+          alert("Game over! Try shooting some shots next time! The zombies die!")
+        } else {
+          alert("Game Over... Your score was " + scoreTotal + "! Your overall accuracy was " + accuracy + " %! Press enter or click ok, then press ~ to play again!")
+          clearInterval(anim)
+          clearInterval(animZ)
+          clearInterval(animL)
+        }
+      }
+    }
+
+    function initialize() {
+      P1.graphic = document.getElementById('P1')
+      P2.graphic = document.getElementById("P2")
+
+
+      scoreboardTotal.graphic = document.getElementById("scoreboardTotal")
+
+      healthBar1.graphic = document.getElementById("healthBar1")
+      healthBar2.graphic = document.getElementById("healthBar2")
+
+      P1.x = P1.graphic.offsetLeft
+      P1.y = P1.graphic.offsetTop
+      P2.x = P2.graphic.offsetLeft;
+      P2.y = P2.graphic.offsetTop;
+
+      totalScore = document.createTextNode(scoreTotal)
+
+      window.addEventListener('keydown', keyPressed);
+      window.addEventListener('keyup', keyReleased);
+
+
+    }
+    window.onload = initialize;
+  </script>
+</body>
+
+</html>
