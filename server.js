@@ -93,7 +93,7 @@ app.get('/eco', function (req, res) {
 });
 
 app.get('/game', function(req, res) {
-    res.sendFile(path.join(_dirname + '/designproject2.0.htm'));
+    res.sendFile(path.join(__dirname + '/designproject2.0.htm'));
 })
 
 
