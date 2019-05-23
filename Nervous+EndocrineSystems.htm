@@ -75,12 +75,12 @@
         }
 
         #neuron {
-            width: 1260px;
+            width: 100%;
             height: 250px;
             border: 2px solid black;
             margin-top: 15px;
             margin-bottom: 15px;
-            
+
         }
 
         #pic {
@@ -89,13 +89,21 @@
             height: auto;
             margin: auto;
             vertical-align: middle;
-    
+
         }
 
         #drawingpane {
-            width: 1600px;
+            width: 100%;
             height: 400px;
             border: 2px solid black;
+            display: block;
+            clear: both;
+        }
+
+        .but {
+            float: left;
+            margin-top: 30px;
+            display: block;
         }
 
         #pause {
@@ -104,6 +112,65 @@
 
         #resume {
             display: none;
+        }
+
+        h2 {
+            color: darkgreen;
+        }
+
+        #synapse {
+            float: right;
+        }
+
+        #desc {
+            width: 35%;
+            float: left;
+            padding: 20px;
+            border: 2px solid black;
+            border-radius: 25px;
+            font-size: 17px;
+        }
+
+        @keyframes N1 {
+            0% {
+             
+                left: 150px;
+                top: 20px;
+            }
+
+            25% {
+                
+                left: 175px;
+                top: 50px;
+            }
+
+            50% {
+                
+                left: 200px;
+                top: 100px;
+            }
+
+            75% {
+               
+                left: 200px;
+                top: 150px;
+            }
+
+            100% {
+                
+                left: 200px;
+                top: 250px;
+            }
+        }
+
+        /* The element to apply the animation to */
+        #N1 {
+            
+            position: relative;
+            
+            animation-name: N1;
+            animation-duration: 2s;
+            animation-iteration-count: infinite;
         }
     </style>
 
@@ -129,92 +196,42 @@
             </div>
         </div>
     </div>
-    <div id='neuron'> 
-        <img id='pic' src='/static/neuron.jpeg'/>
+    <h2> One neuron sends a signal to another neuron </h2>
+    <div id='neuron'>
+        <img id='pic' src='/static/neuron.jpeg' />
     </div>
+    <h2> Video about action potential </h2>
+    <iframe width="640" height="360" src="https://www.youtube.com/embed/HYLyhXRp298" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
 
-    <button id='startanimation' onclick='lick()'>Start Animation</button>
-    <button id='pause' onclick='pau()'>Pause</button>
-    <button id='resume' onclick='resume()'>Resume</button>
+    <h2> Synapse </h2>
+    <div id='desc'>
+        The presynaptic cell (top) contains many spherical synaptic vesicles, each of which holds neurotransmitters. An
+        action potential activates the voltage-gated calcium channels of the pre-synaptic cell. The entrance of Ca2+
+        allows synaptic vesicles to bind with the axon terminal membrane and release neurotransmitters into the
+        synaptic cleft. The released neurotransmitters can then bind to receptors on the post-synaptic cell, allowing
+        positive ions to flow in and create an action potential in that cell.
+    </div>
+    <iframe id='synapse' src='https://gfycat.com/ifr/AbandonedNauticalGalapagosmockingbird' frameborder='0' scrolling='no'
+        allowfullscreen width='420' height='345'></iframe>
+
+    <button class='but' id='NaCh' onclick="NaCh()"> Activate Na+ channel </button>
+    <button class='but' id='KCh' onclick='KCh()'> Activate K+ channel </button>
     
-    <canvas id='drawingpane'></canvas>
 
-
-    <div id='text'>
-
+    <div id='drawingpane'>
+        <div id='axon'></div>
+        <div id='NaCh'></div>
+        <div id='N1'> Na+ </div>
+        <div id='N2'> Na+ </div>
+        <div id='N3'> Na+ </div>
+        <div id='K1'> K+ </div>
+        <div id='K2'> K+ </div>
+        <div id='K3'> K+ </div>
     </div>
+   
     <script>
-        canvas = document.getElementById('drawingpane');
-        let rects = [];
-
-        function initialize() {
-            //SineCurve.graphic = document.getElementById('DStrand')
-            //replace line above with the starting graphic
-            resetCanvas();
-        }
-
-        let Base = {
-            x: 25,
-            y: 157,
-            width: 5,
-            height: 40,
-            color: "red",
-            text: "",
-            location: null,
-            graphic: null,
-
-            render: function (ctx) {
-                ctx.fillStyle = this.color;
-                canvas.text = "bold 14px verdana, sans-serif";
-                this.text.color = 'blue';
-                ctx.fillText(this.text, this.x, this.y);
-                ctx.fillRect(this.x, this.y, this.width, this.height);
-            }
-        }
-
-        function lick() {
-            document.getElementById('startanimation').style.display = 'none';
-            document.getElementById('pause').style.display = 'block';
         
-        /* main animation in here */
-
-            initialize();
-        }
-
-        let go = true;
-        function pau() {
-            document.getElementById('pause').style.display = 'none';
-            document.getElementById('resume').style.display = 'block';
-            document.getElementById('resume').style.backgroundColor = 'green';
-            go = false;
-        }
-
-        function resume() {
-            document.getElementById('resume').style.display = 'none';
-            document.getElementById('pause').style.display = 'block';
-            go = true;
-            window.requestAnimationFrame(unwind);
-        }
-
-        function drawPane() {
-            for (let i = 0; i < rects.length; i++) {
-                rects[i].render(ctx)
-            }
-
-        }
-
-        function resetCanvas() {
-
-            var canvas = document.getElementById("drawingpane");
-            canvas.width = canvas.clientWidth;
-            canvas.height = canvas.clientHeight;
-            ctx = canvas.getContext('2d');
-            drawPane();
-
-        }
-
-        window.onload = resetCanvas;
-        window.onresize = resetCanvas;
     </script>
 </body>
 
