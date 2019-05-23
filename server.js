@@ -102,7 +102,7 @@ function initDB( db ){
 db.serialize(function() {
 db.run('CREATE TABLE IF NOT EXISTS accounts(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username VARCHAR(256), password VARCHAR(256))');
 });
-}
+} //creates a table if it doesn't exist
 
 function getRecords( db, username ){
  console.log('ENTER getRecords');
@@ -124,7 +124,7 @@ function getRecords( db, username ){
  })
 
  return prom;
-}
+} //promise function
 
 function Login( db, username, password ){
  console.log('ENTER getRecords');
@@ -146,7 +146,7 @@ function Login( db, username, password ){
  })
 
  return lprom;
-}
+} //promise function
 
 initDB(db);
 
