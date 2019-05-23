@@ -98,6 +98,7 @@ app.get('/game', function(req, res) {
 
 
 
+
 function initDB( db ){
 db.serialize(function() {
 db.run('CREATE TABLE IF NOT EXISTS accounts(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username VARCHAR(256), password VARCHAR(256))');
