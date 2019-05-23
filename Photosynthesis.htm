@@ -128,12 +128,12 @@
 
 
         function init() {
-            photosystem.src = 'photosystem.png';
-            bilayer.src = 'bilayer.png';
-            light.src = 'light.png';
-            closed.src = 'closed.png';
-            open.src = 'open.png';
-            synthase.src = 'synthase.png'
+            photosystem.src = '/static/photosystem.png';
+            bilayer.src = '/static/bilayer.png';
+            light.src = '/static/light.png';
+            closed.src = '/static/closed.png';
+            open.src = '/static/open.png';
+            synthase.src = '/static/synthase.png'
             window.requestAnimationFrame(draw)
         }
 
@@ -159,7 +159,9 @@
         let lightcounter = 0;
         let pumpcounter = 0;
         let hcounter = 0;
-
+        let wcounter = 0;
+        let ecounter = 0;
+        let ncounter = 0;
 
 
         function draw() {
@@ -171,6 +173,38 @@
             ctx.clearRect(0, 0, 1600, 400); // clear canvas
             ctx.font = "35px Georgia"
 
+            
+
+            //water
+            if(wcounter < 725){
+                if(wcounter < 200){
+                ctx.fillText("H-O-H", 170, 600 - (wcounter))
+                }
+                if(wcounter > 200){
+                    ctx.fillText("e-", 180 + ((wcounter - 200) * 3), 400)
+                    ctx.fillText("O2", 170 - ((wcounter - 200) * .75), 400 - ((wcounter - 200) * 2))
+                    ctx.fillText("H+", 180 + ((wcounter - 200) * 1.5), 400 + ((wcounter - 200) * 2))
+                }
+                wcounter++
+                ncounter++
+            }else{
+                wcounter = 0;
+            }
+
+            //NADPH
+            if(ncounter > 425 && ncounter < 1000){
+                if(ncounter < 725){
+                ctx.fillText("NADP+", 1650, 0 + ((ncounter - 425) * 1.25))
+                }
+                if(ncounter > 725){
+                    ncounter++;
+                    ctx.fillText("NADPH", 1650, 400 - ((ncounter - 725) * 1.75))
+                }
+            }else{
+                ncounter = wcounter;
+            }
+
+            
             //sunlight animation
             if (lightcounter < 50) {
                 lightcounter++;
@@ -200,6 +234,36 @@
             ctx.drawImage(photosystem, 1130, 300)
             ctx.fillText("Photosystem I", 1170, 500)
 
+            //hydrogen ions
+            if (hcounter < 300) {
+                ctx.fillText("H+", 650, 200 + (1.4 * hcounter));
+                if(hcounter < 220){
+                ctx.fillText("ADP + Pi", 1800, 30 + (1.2 * hcounter))
+                }
+                if(hcounter > 220){
+                    ctx.fillText("ATP", 1800, 300 - (hcounter - 220))
+                }
+                ctx.fillText("H+", 1830, 600 - (1.4 * hcounter));
+                hcounter++;
+            } else {
+                ctx.fillText("ATP", 1800, 300 - (hcounter - 220))
+                ctx.fillText("H+", 650 + (3 * (hcounter - 300)), 620);
+                ctx.fillText("H+", 1830 - (3 * (hcounter - 300)), 180);
+                hcounter++;
+                if (hcounter > 700) {
+                    hcounter = 0;
+                }
+            }
+
+            ctx.fillText("H+", 400, 600)
+            ctx.fillText("H+", 600, 700)
+            ctx.fillText("H+", 800, 600)
+            ctx.fillText("H+", 900, 700)
+            ctx.fillText("H+", 500, 700)
+            ctx.fillText("H+", 1000, 600)
+            ctx.fillText("H+", 1300, 600)
+            ctx.fillText("H+", 1500, 700)
+
             //hydrogen pump 
             if(hcounter < 175){
                 ctx.drawImage(open, 575, 310)
@@ -209,26 +273,17 @@
                    
             ctx.fillText("Hydrogen Pump", 560, 540)
 
-            //hydrogen ions
-            if (hcounter < 300) {
-                ctx.fillText("H+", 650, 200 + (1.4 * hcounter));
-                ctx.fillText("H+", 1830, 600 - (1.4 * hcounter));
-                hcounter++;
-            } else {
-                ctx.fillText("H+", 650 + (3 * (hcounter - 300)), 620);
-                ctx.fillText("H+", 1830 - (3 * (hcounter - 300)), 180);
-                hcounter++;
-                if (hcounter > 700) {
-                    hcounter = 0;
-                }
-            }
-
             //synthase
             ctx.drawImage(synthase, 1790, 310)
             ctx.fillText("ATP Synthase", 1750, 550)
 
-            //water
-            ctx.fillText("H-O-H", 150, 700)
+            //stroma
+            ctx.fillText("Stroma", 1000, 100)
+
+            //Thylakoid Interior
+            ctx.fillText("Thylakoid Interior", 1000, 700)
+
+            
 
 
             window.requestAnimationFrame(draw);
